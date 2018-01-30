@@ -1,31 +1,23 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  var options = {
-    chromeArgs: {}
-  };
-
-  // TODO: echo thos
-
   var ars = puppeteer.defaultArgs();
 
-  console.log('test');
+  // try to get WebGL to work..
+  ars.push('--use-gl=swiftshader');
+  ars.push('--disable-setuid-sandbox');
 
   console.log(ars);
 
-for (var property in puppeteer) {
-    if (object.hasOwnProperty(property)) {
-        console.log('1');
-    }
-}
+  var site = 'http://news.ycombinator.com';
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--use-gl=swiftshader-webgl",'--disable-setuid-sandbox'],
+    args: ars,
     ignoreDefaultArgs: false });
   const page = await browser.newPage();
-  await page.goto('https://threejs.org/examples/#webgl_geometries', {waitUntil: 'networkidle2'});
-  await page.screenshot({path: 'hn.png'});
+  await page.goto(site, { waitUntil: 'networkidle2' });
+  await page.screenshot({ path: 'hn.png' });
 
   await browser.close();
 })();
