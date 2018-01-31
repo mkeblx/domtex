@@ -14,10 +14,10 @@ const puppeteer = require('puppeteer');
   const browser = await puppeteer.launch({
     headless: true,
     args: ars,
-    ignoreDefaultArgs: false });
+    ignoreDefaultArgs: true });
   const page = await browser.newPage();
   await page.goto(site, { waitUntil: 'networkidle2' });
-  await page.screenshot({ path: 'hn.png' });
+  await page.screenshot({ path: 'output/hn.png' });
 
   await browser.close();
 })();
