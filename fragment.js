@@ -1,4 +1,10 @@
 const puppeteer = require('puppeteer');
+var crypto = require('crypto');
+
+const argv = require('yargs')
+  .usage('Usage: $0 -html [string] -w [num] -h [num]')
+  .demandOption(['html'])
+  .argv;
 
 (async () => {
 
@@ -10,23 +16,18 @@ const puppeteer = require('puppeteer');
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
-  var args = process.argv.slice(2);
 
-  args.forEach(function (val, index, array) {
-    console.log(index + ': ' + val);
-  });
-
-  if (args.length > 0) {
-    html = args[0];
+  if (argv.html) {
+    html = argv.html;
   }
   console.log('html:');
   console.log(html);
 
-  if (args.length > 1) {
-    width = parseInt(args[1], 10);
+  if (argv.width) {
+    width = parseInt(argv.width, 10);
   }
-  if (args.length > 2) {
-    height = parseInt(args[2], 10);
+  if (argv.height) {
+    height = parseInt(argv.height, 10);
   }
 
   const browser = await puppeteer.launch({
@@ -41,8 +42,13 @@ const puppeteer = require('puppeteer');
 
   page.setContent(html);
 
-  await page.screenshot({ path: 'output/fragment.png' });
+  var fileName = md5(html).substring(0,8)+'.png';
+  var path = 'output/'+fileName;
+  await page.screenshot({ path: path });
 
   await browser.close();
-
 })();
+
+function md5(string) {
+  return crypto.createHash('md5').update(string).digest('hex');
+}
