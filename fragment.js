@@ -10,20 +10,23 @@ const puppeteer = require('puppeteer');
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
-  process.argv.forEach(function (val, index, array) {
+  var args = process.argv.slice(2);
+
+  args.forEach(function (val, index, array) {
     console.log(index + ': ' + val);
   });
 
-  if (process.argv.length > 2) {
-    html = process.argv[2];
+  if (args.length > 0) {
+    html = args[0];
   }
+  console.log('html:');
   console.log(html);
 
-  if (process.argv.length > 3) {
-    width = parseInt(process.argv[3], 10);
+  if (args.length > 1) {
+    width = parseInt(args[1], 10);
   }
-  if (process.argv.length > 4) {
-    height = parseInt(process.argv[4], 10);
+  if (args.length > 2) {
+    height = parseInt(args[2], 10);
   }
 
   const browser = await puppeteer.launch({
