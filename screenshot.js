@@ -3,7 +3,7 @@ var crypto = require('crypto');
 const { URL } = require('url');
 
 const argv = require('yargs')
-  .usage('Usage: $0 -url [string] -w [num] -h [num]')
+  .usage('Usage: $0 -url [string] -w [num] -h [num] -cx [num] -cy[num] -cw [num] -ch [num]')
   //.demandOption(['url'])
   .argv;
 
@@ -53,7 +53,20 @@ const argv = require('yargs')
 
   var fileName = md5(url).substring(0, 8)+'.png';
   var path = 'output/'+fileName;
-  await page.screenshot({ path: path });
+
+  var options = {
+    path: path
+  };
+  if (argv.cx && argv.cy && argv.cw && argv.ch) {
+    var clip = {};
+    clip.x = argv.cx;
+    clip.y = argv.cy;
+    clip.width = argv.cw;
+    clip.height = argv.ch;
+    options.clip = clip;
+  }
+
+  await page.screenshot(options);
 
   await browser.close();
 })();
