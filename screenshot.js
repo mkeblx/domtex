@@ -68,6 +68,8 @@ const argv = require('yargs')
 
   await page.screenshot(options);
 
+  console.log('output: ' + path);
+
   await browser.close();
 })();
 

@@ -46,6 +46,8 @@ const argv = require('yargs')
   var path = 'output/'+fileName;
   await page.screenshot({ path: path });
 
+  console.log('output: ' + path);
+
   await browser.close();
 })();
 
