@@ -1,0 +1,19 @@
+{
+  "name": "domtex",
+  "version": "0.1.0",
+  "description": "DOM to texture lib",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkeblx/domtex.git"
+  },
+  "author": "mkeblx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mkeblx/domtex/issues"
+  },
+  "homepage": "https://github.com/mkeblx/domtex#readme"
+}
