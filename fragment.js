@@ -9,8 +9,8 @@ const argv = require('yargs')
 (async () => {
 
   const DEFAULT_FRAG = '<h1>hello html fragment</h1>';
-  const DEFAULT_WIDTH = 500;
-  const DEFAULT_HEIGHT = 500;
+  const DEFAULT_WIDTH = 512;
+  const DEFAULT_HEIGHT = 512;
 
   var html = DEFAULT_FRAG;
   var width = DEFAULT_WIDTH;

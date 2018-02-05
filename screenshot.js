@@ -17,8 +17,8 @@ const argv = require('yargs')
   //console.log(ars);
 
   const DEFAULT_URL = 'http://news.ycombinator.com';
-  const DEFAULT_WIDTH = 500;
-  const DEFAULT_HEIGHT = 500;
+  const DEFAULT_WIDTH = 512;
+  const DEFAULT_HEIGHT = 512;
 
   var url = DEFAULT_URL;
   var width = DEFAULT_WIDTH;
