@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mkeblx/domtex/issues"
   },
-  "homepage": "https://github.com/mkeblx/domtex#readme"
+  "homepage": "https://github.com/mkeblx/domtex#readme",
+  "dependencies": {
+    "yargs": "^11.0.0"
+  }
 }
