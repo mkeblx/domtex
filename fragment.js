@@ -42,11 +42,15 @@ const argv = require('yargs')
 
   page.setContent(html);
 
-  var fileName = md5(html).substring(0,8)+'.png';
+  var fileName = md5(html+width+'x'+height)
+    .substring(0,12)+'.png';
   var path = 'output/'+fileName;
   await page.screenshot({ path: path });
 
-  console.log('output: ' + path);
+  var resp = {
+    output: path
+  };
+  console.log('response:\n' + JSON.stringify(resp));
 
   await browser.close();
 })();

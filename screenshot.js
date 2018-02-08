@@ -51,12 +51,8 @@ const argv = require('yargs')
 
   await page.goto(url, { waitUntil: 'networkidle2' });
 
-  var fileName = md5(url).substring(0, 8)+'.png';
-  var path = 'output/'+fileName;
+  var options = {};
 
-  var options = {
-    path: path
-  };
   if (argv.cx && argv.cy && argv.cw && argv.ch) {
     var clip = {};
     clip.x = argv.cx;
@@ -93,9 +89,18 @@ const argv = require('yargs')
     }
   }
 
+  var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
+    .substring(0, 12)+'.png';
+  var path = 'output/'+fileName;
+
+  options.path = path;
+
   await page.screenshot(options);
 
-  console.log('output: ' + path);
+  var resp = {
+    output: path
+  };
+  console.log('response:\n' + JSON.stringify(resp));
 
   await browser.close();
 })();
