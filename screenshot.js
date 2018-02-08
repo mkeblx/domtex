@@ -3,7 +3,7 @@ var crypto = require('crypto');
 const { URL } = require('url');
 
 const argv = require('yargs')
-  .usage('Usage: $0 -url [string] -w [num] -h [num] -cx [num] -cy[num] -cw [num] -ch [num]')
+  .usage('Usage: $0 --url [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --sel [string]')
   //.demandOption(['url'])
   .argv;
 
@@ -64,6 +64,33 @@ const argv = require('yargs')
     clip.width = argv.cw;
     clip.height = argv.ch;
     options.clip = clip;
+  }
+
+  if (argv.sel) {
+    var selector = argv.sel;
+    var el = await page.$(selector);
+
+    var attrs = await page.evaluate((sel) => {
+      var attrs = {};
+      var el = document.querySelector(sel);
+      if (el === null) {
+        attrs = null;
+      } else {
+        var viewportOffset = el.getBoundingClientRect();
+        attrs.x = viewportOffset.left;
+        attrs.y = viewportOffset.top;
+        attrs.width = el.offsetWidth;
+        attrs.height = el.offsetHeight;
+      }
+      return attrs;
+    }, selector);
+
+    if (attrs === null) {
+      console.log('selector not found');
+    } else {
+      console.log(attrs);
+      options.clip = attrs;
+    }
   }
 
   await page.screenshot(options);

@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 var crypto = require('crypto');
 
 const argv = require('yargs')
-  .usage('Usage: $0 -html [string] -w [num] -h [num]')
+  .usage('Usage: $0 --html [string] --w [num] --h [num]')
   .demandOption(['html'])
   .argv;
 
