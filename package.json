@@ -4,7 +4,9 @@
   "description": "DOM to texture lib",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-service": "node service/index.js",
+    "serve": "python3 -m http.server",
+    "test": "node tests.js"
   },
   "repository": {
     "type": "git",
