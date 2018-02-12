@@ -4,6 +4,13 @@
 <meta charset="utf-8">
   <title>Interactive input</title>
 <style>
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   font-family: sans-serif;
 }
@@ -20,6 +27,16 @@ body {
   display: inline-block;
   clear: both;
   margin-top: 10px;
+}
+
+#output img {
+  clear: both;
+  display: block;
+  margin-bottom: 5px;
+}
+
+#output textarea {
+  width: 100%;
 }
 </style>
 </head>
@@ -61,15 +78,20 @@ function generate(url, html) {
     return;
   }
 
-  var domain = 'http://localhost:8000';
+  var domain = 'http://localhost:8080';
   var reqURL = domain+'/generate?url='+encodeURIComponent(url);
 
   console.log(reqURL);
 
   fetch(reqURL)
     .then(checkStatus)
+    .then((resp) => resp.json())
     .then(function(resp){
+      console.log(resp);
+
       var path = resp.path;
+
+      console.log('path: ' + path);
       var output = document.getElementById('output');
       var outputImg = document.getElementById('output-img');
 
