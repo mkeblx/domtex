@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+  <title>Interactive input</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+
+#url {
+  width: 300px;
+}
+
+#output {
+  border: 1px solid black;
+  padding: 5px;
+  min-height: 10px;
+  min-width: 10px;
+  display: inline-block;
+  clear: both;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div id="container">
+  <h1>Generate Texture</h1>
+
+  <form id="form">
+  <input type="text" id="url" placeholder="url" value="https://news.ycombinator.com" />
+  <!--<textarea id="html" placeholder="<html><h1>hello world</h1></html>"></textarea>-->
+  <input type="button" value="Generate" id="generate" />
+  </form>
+
+  <div id="output">
+    <img id="output-img" src="" />
+    <textarea id="response"></textarea>
+  </div>
+
+</div>
+<script>
+init();
+
+function init() {
+  var genBtn = document.getElementById('generate');
+  genBtn.addEventListener('click', function(ev){
+    var url = document.getElementById('url').value;
+    var html = '';//document.getElementById('html').value;
+
+    generate(url, html);
+  });
+}
+
+function generate(url, html) {
+  console.log('Generate texture:');
+  if (url !== '') {
+    console.log('URL: ' + url);
+  } else {
+    console.log('No URL provided');
+    return;
+  }
+
+  var domain = 'http://localhost:8000';
+  var reqURL = domain+'/generate?url='+encodeURIComponent(url);
+
+  console.log(reqURL);
+
+  fetch(reqURL)
+    .then(checkStatus)
+    .then(function(resp){
+      var path = resp.path;
+      var output = document.getElementById('output');
+      var outputImg = document.getElementById('output-img');
+
+      outputImg.setAttribute('src', path);
+
+      var responseText = JSON.stringify(resp);
+      var respEl = document.getElementById('response');
+      respEl.value = responseText;
+  });
+}
+
+function checkStatus(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    var error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
+}
+</script>
+</body>
+</html>

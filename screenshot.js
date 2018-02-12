@@ -16,7 +16,7 @@ const argv = require('yargs')
 
   //console.log(ars);
 
-  const DEFAULT_URL = 'http://news.ycombinator.com';
+  const DEFAULT_URL = 'https://news.ycombinator.com';
   const DEFAULT_WIDTH = 512;
   const DEFAULT_HEIGHT = 512;
 
@@ -27,6 +27,8 @@ const argv = require('yargs')
 
   if (argv.url) {
     url = argv.url;
+    if (!url.startsWith('http'))
+      url += 'http://';
   }
   console.log('url: ' + url);
 
@@ -98,7 +100,7 @@ const argv = require('yargs')
   await page.screenshot(options);
 
   var resp = {
-    output: path
+    path: path
   };
   console.log('response:\n' + JSON.stringify(resp));
 

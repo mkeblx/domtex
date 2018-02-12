@@ -48,7 +48,7 @@ const argv = require('yargs')
   await page.screenshot({ path: path });
 
   var resp = {
-    output: path
+    path: path
   };
   console.log('response:\n' + JSON.stringify(resp));
 
