@@ -89,7 +89,7 @@ function generate(url, html) {
     .then(function(resp){
       console.log(resp);
 
-      var path = resp.path;
+      var path = '/'+resp.path;
 
       console.log('path: ' + path);
       var output = document.getElementById('output');

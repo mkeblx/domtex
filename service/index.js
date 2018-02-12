@@ -1,6 +1,7 @@
 var http = require('http');
 var _url = require('url');
 var querystring = require('querystring');
+const { execFile } = require('child_process');
 
 var PORT = 8080;
 const server = http.createServer();
@@ -11,32 +12,40 @@ server.on('request', (request, response) => {
 
   var urlParts = _url.parse(url, true);
   var query = urlParts.query;
-  var queryParts = querystring.parse(query);
-  var siteUrl = queryParts.url;
+  console.log('query: ' + JSON.stringify(query));
+
+  var siteUrl = decodeURI(query.url);
+
+  console.log('site URL: ' + siteUrl);
 
   request.on('error', (err) => {
     console.error(err.stack);
   }).on('data', (chunk) => {
 
-  }).on('end', () => {
-    response.statusCode = 200;
-    response.setHeader('Content-Type', 'application/json');
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+  }).on('end', createResponse);
 
-    var resp = {};
-    resp.requestUrl = url;
-    resp.url = siteUrl;
-    resp.width = 512;
-    resp.height = 512;
-    resp.path = '/output/612c1b08.png';
+  function createResponse(json) {
 
-    var json = JSON.stringify(resp);
-    console.log(json);
-    response.write(json);
+    const child = execFile('node', ['screenshot.js','--url='+siteUrl], (error, stdout, stderr) => {
+      console.log('callback');
+      if (error) {
+        throw error;
+      }
+      console.log('screenshot.js output:');
+      console.log(stdout);
 
-    response.end();
-  })
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'application/json');
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+
+      var respJson = stdout;
+      console.log(respJson);
+      response.write(respJson);
+
+      response.end();
+    });
+  }
 
 }).listen(PORT, (err) => {
   if (err) {

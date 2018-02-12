@@ -7,6 +7,8 @@ const argv = require('yargs')
   //.demandOption(['url'])
   .argv;
 
+var verbose = false;
+
 (async () => {
   var ars = puppeteer.defaultArgs();
 
@@ -14,7 +16,7 @@ const argv = require('yargs')
   ars.push('--use-gl=swiftshader');
   ars.push('--disable-setuid-sandbox');
 
-  //console.log(ars);
+  //log(ars);
 
   const DEFAULT_URL = 'https://news.ycombinator.com';
   const DEFAULT_WIDTH = 512;
@@ -30,7 +32,7 @@ const argv = require('yargs')
     if (!url.startsWith('http'))
       url += 'http://';
   }
-  console.log('url: ' + url);
+  log('url: ' + url);
 
   if (argv.width) {
     width = parseInt(argv.width, 10);
@@ -84,9 +86,9 @@ const argv = require('yargs')
     }, selector);
 
     if (attrs === null) {
-      console.log('selector not found');
+      log('selector not found');
     } else {
-      console.log(attrs);
+      log(attrs);
       options.clip = attrs;
     }
   }
@@ -100,12 +102,22 @@ const argv = require('yargs')
   await page.screenshot(options);
 
   var resp = {
-    path: path
+    path: path,
+    url: url,
+    width: width,
+    height: height
   };
-  console.log('response:\n' + JSON.stringify(resp));
+  log(JSON.stringify(resp), true);
 
   await browser.close();
-})();
+})().catch(err => {
+  console.log('catch: ' + err);
+});
+
+function log(msg, force) {
+  if (verbose || force)
+    console.log(msg);
+}
 
 function md5(string) {
   return crypto.createHash('md5').update(string).digest('hex');
