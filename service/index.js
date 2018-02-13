@@ -10,9 +10,24 @@ server.on('request', (request, response) => {
 
   const { method, url } = request;
 
+  if (method !== 'GET' || !url.startsWith('/generate')) {
+    console.log('invalid request');
+    response.statusCode = 404;
+    response.end();
+    return;
+  }
+
   var urlParts = _url.parse(url, true);
   var query = urlParts.query;
   console.log('query: ' + JSON.stringify(query));
+
+  if (query.url === undefined) {
+    console.log('missing url parameter');
+    res.statusMessage = 'Missing required url parameter';
+    res.statusCode = 400;
+    response.end();
+    return;
+  }
 
   var siteUrl = decodeURI(query.url);
 
@@ -26,7 +41,10 @@ server.on('request', (request, response) => {
 
   function createResponse(json) {
 
-    const child = execFile('node', ['screenshot.js','--url='+siteUrl], (error, stdout, stderr) => {
+    var args = ['screenshot.js'];
+    args.push('--url='+siteUrl);
+
+    const child = execFile('node', args, (error, stdout, stderr) => {
       console.log('callback');
       if (error) {
         throw error;

@@ -26,6 +26,16 @@ var verbose = false;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
+  var options = {};
+
+  if (argv.cx && argv.cy && argv.cw && argv.ch) {
+    var clip = {};
+    clip.x = argv.cx;
+    clip.y = argv.cy;
+    clip.width = argv.cw;
+    clip.height = argv.ch;
+    options.clip = clip;
+  }
 
   if (argv.url) {
     url = argv.url;
@@ -54,17 +64,6 @@ var verbose = false;
   });
 
   await page.goto(url, { waitUntil: 'networkidle2' });
-
-  var options = {};
-
-  if (argv.cx && argv.cy && argv.cw && argv.ch) {
-    var clip = {};
-    clip.x = argv.cx;
-    clip.y = argv.cy;
-    clip.width = argv.cw;
-    clip.height = argv.ch;
-    options.clip = clip;
-  }
 
   if (argv.sel) {
     var selector = argv.sel;
