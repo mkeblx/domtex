@@ -106,6 +106,10 @@ var verbose = false;
     width: width,
     height: height
   };
+  if (options.clip && options.clip.width && options.clip.height) {
+    resp.width = options.clip.width;
+    resp.height = options.clip.height;
+  }
   log(JSON.stringify(resp), true);
 
   await browser.close();

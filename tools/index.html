@@ -46,6 +46,7 @@ body {
 
   <form id="form">
   <input type="text" id="url" placeholder="url" value="https://news.ycombinator.com" />
+  <input type="text" id="sel" placeholder="selector i.e. #ID" value=".pagetop">
   <!--<textarea id="html" placeholder="<html><h1>hello world</h1></html>"></textarea>-->
   <input type="button" value="Generate" id="generate" />
   </form>
@@ -63,13 +64,14 @@ function init() {
   var genBtn = document.getElementById('generate');
   genBtn.addEventListener('click', function(ev){
     var url = document.getElementById('url').value;
+    var sel = document.getElementById('sel').value;
     var html = '';//document.getElementById('html').value;
 
-    generate(url, html);
+    generate(url, sel, html);
   });
 }
 
-function generate(url, html) {
+function generate(url, sel, html) {
   console.log('Generate texture:');
   if (url !== '') {
     console.log('URL: ' + url);
@@ -79,7 +81,12 @@ function generate(url, html) {
   }
 
   var domain = 'http://localhost:8080';
-  var reqURL = domain+'/generate?url='+encodeURIComponent(url);
+  var params = {};
+  params['url'] = url;
+  if (sel !== '') {
+    params['sel'] = sel;
+  }
+  var reqURL = domain+'/generate?'+serialize(params);
 
   console.log(reqURL);
 
@@ -111,6 +118,15 @@ function checkStatus(response) {
     error.response = response;
     throw error;
   }
+}
+
+var serialize = function(obj) {
+  var str = [];
+  for(var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+    }
+  return str.join('&');
 }
 </script>
 </body>

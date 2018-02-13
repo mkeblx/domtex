@@ -30,8 +30,14 @@ server.on('request', (request, response) => {
   }
 
   var siteUrl = decodeURI(query.url);
-
   console.log('site URL: ' + siteUrl);
+
+  var sel = null;
+  if (query.sel) {
+    sel = decodeURI(query.sel);
+    console.log('selector: ' + sel);
+  }
+
 
   request.on('error', (err) => {
     console.error(err.stack);
@@ -43,6 +49,8 @@ server.on('request', (request, response) => {
 
     var args = ['screenshot.js'];
     args.push('--url='+siteUrl);
+    if (sel)
+      args.push('--sel='+sel);
 
     const child = execFile('node', args, (error, stdout, stderr) => {
       console.log('callback');
