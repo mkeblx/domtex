@@ -38,6 +38,57 @@ body {
 #output textarea {
   width: 100%;
 }
+
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+.loader {
+  margin: 10px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 4px solid rgba(0,0,0, 0.2);
+  border-right: 4px solid rgba(0,0,0, 0.2);
+  border-bottom: 4px solid rgba(0,0,0, 0.2);
+  border-left: 4px solid #000000;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
 </style>
 </head>
 <body>
@@ -52,17 +103,23 @@ body {
   </form>
 
   <div id="output">
+    <div id="loader" class="loader hide"></div>
     <img id="output-img" src="" />
     <textarea id="response"></textarea>
   </div>
 
 </div>
 <script>
+'use strict';
+
 init();
 
 function init() {
+  var loader = document.getElementById('loader');
   var genBtn = document.getElementById('generate');
   genBtn.addEventListener('click', function(ev){
+    loader.classList.remove('hide');
+
     var url = document.getElementById('url').value;
     var sel = document.getElementById('sel').value;
     var html = '';//document.getElementById('html').value;
@@ -95,6 +152,7 @@ function generate(url, sel, html) {
     .then((resp) => resp.json())
     .then(function(resp){
       console.log(resp);
+      loader.classList.add('hide');
 
       var path = '/'+resp.path;
 
