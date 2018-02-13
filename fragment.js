@@ -23,11 +23,11 @@ const argv = require('yargs')
   console.log('html:');
   console.log(html);
 
-  if (argv.width) {
-    width = parseInt(argv.width, 10);
+  if (argv.w) {
+    width = parseInt(argv.w, 10);
   }
-  if (argv.height) {
-    height = parseInt(argv.height, 10);
+  if (argv.h) {
+    height = parseInt(argv.h, 10);
   }
 
   const browser = await puppeteer.launch({

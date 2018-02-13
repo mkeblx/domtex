@@ -1,25 +1,20 @@
+// create image map of all links on page
 const puppeteer = require('puppeteer');
 var crypto = require('crypto');
 const { URL } = require('url');
 var fs = require('fs');
 
 const argv = require('yargs')
-  .usage('Usage: $0 --url [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --sel [string]')
+  .usage('Usage: $0 --url [string] --w [num] --h [num]')
   //.demandOption(['url'])
   .argv;
 
 var verbose = false;
 var forceUpdate = false;
 
+log('Generate imagemap data:');
+
 (async () => {
-  var ars = puppeteer.defaultArgs();
-
-  // try to get WebGL to work..
-  ars.push('--use-gl=swiftshader');
-  ars.push('--disable-setuid-sandbox');
-
-  //log(ars);
-
   const DEFAULT_URL = 'https://news.ycombinator.com';
   const DEFAULT_WIDTH = 512;
   const DEFAULT_HEIGHT = 512;
@@ -29,15 +24,6 @@ var forceUpdate = false;
   var height = DEFAULT_HEIGHT;
 
   var options = {};
-
-  if (argv.cx && argv.cy && argv.cw && argv.ch) {
-    var clip = {};
-    clip.x = argv.cx;
-    clip.y = argv.cy;
-    clip.width = argv.cw;
-    clip.height = argv.ch;
-    options.clip = clip;
-  }
 
   if (argv.url) {
     url = argv.url;
@@ -55,9 +41,7 @@ var forceUpdate = false;
 
   // TODO: avoid this setup if already in cache
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ars,
-    ignoreDefaultArgs: true });
+    headless: true });
 
   const page = await browser.newPage();
 
@@ -68,31 +52,32 @@ var forceUpdate = false;
 
   await page.goto(url, { waitUntil: 'networkidle2' });
 
-  if (argv.sel) {
-    var selector = argv.sel;
-    var el = await page.$(selector);
+  var links = await page.evaluate(() => {
+    var links = [];
+    var els = document.querySelectorAll('a');
+    if (els.length === 0) {
+    } else {
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
 
-    var attrs = await page.evaluate((sel) => {
-      var attrs = {};
-      var el = document.querySelector(sel);
-      if (el === null) {
-        attrs = null;
-      } else {
+        var attrs = {};
+        attrs.href = el.getAttribute('href');
         var viewportOffset = el.getBoundingClientRect();
-        attrs.x = viewportOffset.left;
-        attrs.y = viewportOffset.top;
+        attrs.x = Math.floor(viewportOffset.left);
+        attrs.y = Math.floor(viewportOffset.top);
         attrs.width = el.offsetWidth;
         attrs.height = el.offsetHeight;
-      }
-      return attrs;
-    }, selector);
 
-    if (attrs === null) {
-      log('selector not found');
-    } else {
-      log(attrs);
-      options.clip = attrs;
+        links.push(attrs);
+      }
     }
+    return links;
+  });
+
+  if (links === null) {
+    log('no links found');
+  } else {
+    log(links);
   }
 
   var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
@@ -102,19 +87,16 @@ var forceUpdate = false;
   options.path = path;
 
   if (!fs.existsSync(path) && !forceUpdate) {
-    await page.screenshot(options);
+    //await page.screenshot(options);
   }
 
   var resp = {
     path: path,
     url: url,
     width: width,
-    height: height
+    height: height,
+    links: links
   };
-  if (options.clip && options.clip.width && options.clip.height) {
-    resp.width = options.clip.width;
-    resp.height = options.clip.height;
-  }
   log(JSON.stringify(resp), true);
 
   await browser.close();
