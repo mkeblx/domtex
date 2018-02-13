@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 var crypto = require('crypto');
 const { URL } = require('url');
+var fs = require('fs');
 
 const argv = require('yargs')
   .usage('Usage: $0 --url [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --sel [string]')
@@ -8,6 +9,7 @@ const argv = require('yargs')
   .argv;
 
 var verbose = false;
+var forceUpdate = false;
 
 (async () => {
   var ars = puppeteer.defaultArgs();
@@ -51,6 +53,7 @@ var verbose = false;
     height = parseInt(argv.height, 10);
   }
 
+  // TODO: avoid this setup if already in cache
   const browser = await puppeteer.launch({
     headless: true,
     args: ars,
@@ -98,7 +101,9 @@ var verbose = false;
 
   options.path = path;
 
-  await page.screenshot(options);
+  if (!fs.existsSync(path) && !forceUpdate) {
+    await page.screenshot(options);
+  }
 
   var resp = {
     path: path,
