@@ -91,7 +91,7 @@ var forceUpdate = false;
 
   options.path = path;
 
-  if (!fs.existsSync(path) && !forceUpdate) {
+  if (!fs.existsSync(path) || forceUpdate) {
     await page.screenshot(options);
   }
 

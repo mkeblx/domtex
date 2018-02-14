@@ -10,7 +10,7 @@ const argv = require('yargs')
   .argv;
 
 var verbose = false;
-var forceUpdate = false;
+var forceUpdate = true;
 
 log('Generate imagemap data:');
 
@@ -86,8 +86,8 @@ log('Generate imagemap data:');
 
   options.path = path;
 
-  if (!fs.existsSync(path) && !forceUpdate) {
-    //await page.screenshot(options);
+  if (!fs.existsSync(path) || forceUpdate) {
+    await page.screenshot(options);
   }
 
   var resp = {
