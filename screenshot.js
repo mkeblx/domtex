@@ -12,14 +12,6 @@ var verbose = false;
 var forceUpdate = false;
 
 (async () => {
-  var ars = puppeteer.defaultArgs();
-
-  // try to get WebGL to work..
-  ars.push('--use-gl=swiftshader');
-  ars.push('--disable-setuid-sandbox');
-
-  //log(ars);
-
   const DEFAULT_URL = 'https://news.ycombinator.com';
   const DEFAULT_WIDTH = 512;
   const DEFAULT_HEIGHT = 512;
@@ -55,9 +47,7 @@ var forceUpdate = false;
 
   // TODO: avoid this setup if already in cache
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ars,
-    ignoreDefaultArgs: true });
+    headless: true });
 
   const page = await browser.newPage();
 
