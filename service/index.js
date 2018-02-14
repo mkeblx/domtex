@@ -66,7 +66,6 @@ server.on('request', (request, response) => {
       response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
 
       var respJson = stdout;
-      console.log(respJson);
       response.write(respJson);
 
       response.end();
