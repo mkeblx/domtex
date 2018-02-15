@@ -112,10 +112,9 @@ body {
 <script>
 'use strict';
 
-init();
+var loader = document.getElementById('loader');
 
 function init() {
-  var loader = document.getElementById('loader');
   var genBtn = document.getElementById('generate');
   genBtn.addEventListener('click', function(ev){
     loader.classList.remove('hide');
@@ -165,7 +164,12 @@ function generate(url, sel, html) {
       var responseText = JSON.stringify(resp);
       var respEl = document.getElementById('response');
       respEl.value = responseText;
-  });
+    }).catch((error) => {
+      console.log(error);
+      loader.classList.add('hide');
+      var respEl = document.getElementById('response');
+      respEl.value = 'Service is down';
+    });
 }
 
 function checkStatus(response) {
@@ -186,6 +190,9 @@ var serialize = function(obj) {
     }
   return str.join('&');
 }
+
+init();
+
 </script>
 </body>
 </html>
