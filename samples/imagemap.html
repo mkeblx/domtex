@@ -38,6 +38,9 @@ var map = document.getElementById('linksmap');
 var resp = JSON.parse(json);
 console.log(resp);
 
+var w = resp.width;
+var h = resp.height;
+
 var links = resp.links;
 
 for (var i = 0; i < links.length; i++) {
@@ -47,12 +50,14 @@ for (var i = 0; i < links.length; i++) {
     href = site + '/' + href; // TODO: don't always want to add slash unless bare domain
   //console.log(href);
 
-  // TODO: restrict to adding only visible links
+  if (link.x > w || link.y > h)
+    continue;
+
+  var coords = [link.x, link.y, Math.min(link.x+link.width, w), Math.min(link.y+link.height, h)];
 
   var areaEl = document.createElement('area');
   console.log(areaEl);
   areaEl.setAttribute('shape', 'rect');
-  var coords = [link.x, link.y, link.x+link.width, link.y+link.height];
   areaEl.setAttribute('coords', coords.join(','));
   areaEl.setAttribute('href', href);
   map.appendChild(areaEl);
