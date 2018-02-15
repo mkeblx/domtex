@@ -52,7 +52,7 @@ log('Generate imagemap data:');
 
   await page.goto(url, { waitUntil: 'networkidle2' });
 
-  var links = await page.evaluate(() => {
+  var links = await page.evaluate((width, height) => {
     var links = [];
     var els = document.querySelectorAll('a');
     if (els.length === 0) {
@@ -65,6 +65,10 @@ log('Generate imagemap data:');
         var viewportOffset = el.getBoundingClientRect();
         attrs.x = Math.floor(viewportOffset.left);
         attrs.y = Math.floor(viewportOffset.top);
+
+        if (attrs.x > width || attrs.y > height)
+          continue;
+
         attrs.width = el.offsetWidth;
         attrs.height = el.offsetHeight;
 
@@ -72,7 +76,7 @@ log('Generate imagemap data:');
       }
     }
     return links;
-  });
+  }, width, height);
 
   if (links === null) {
     log('no links found');
