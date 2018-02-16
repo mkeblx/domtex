@@ -59,6 +59,7 @@ var forceUpdate = false;
   await page.goto(url, { waitUntil: 'networkidle2' });
 
   var attrs;
+  var textures = {};
 
   if (argv.sel) {
     var selectors = argv.sel;
@@ -96,18 +97,36 @@ var forceUpdate = false;
       log(Object.keys(attrs).length + ' selectors found');
       log(attrs);
     }
-  }
 
-  var textures = {};
+    for (var prop in attrs) {
+      options.clip = attrs[prop];
 
-  for (var prop in attrs) {
-    options.clip = attrs[prop];
+      var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
+        .substring(0, 12)+'.png';
+      var path = 'output/'+fileName;
 
+      options.path = path;
+
+      if (!fs.existsSync(path) || forceUpdate) {
+        await page.screenshot(options);
+      }
+
+      var texture = {};
+      texture.path = options.path;
+      if (options.clip && options.clip.width && options.clip.height) {
+        texture.width = options.clip.width;
+        texture.height = options.clip.height;
+      }
+
+      textures[prop] = texture;
+    }
+  } else { // whole page
     var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
       .substring(0, 12)+'.png';
     var path = 'output/'+fileName;
 
     options.path = path;
+
 
     if (!fs.existsSync(path) || forceUpdate) {
       await page.screenshot(options);
@@ -115,12 +134,14 @@ var forceUpdate = false;
 
     var texture = {};
     texture.path = options.path;
+    texture.width = width;
+    texture.height = height;
     if (options.clip && options.clip.width && options.clip.height) {
       texture.width = options.clip.width;
       texture.height = options.clip.height;
     }
 
-    textures[prop] = texture;
+    textures['document'] = texture;
   }
 
   var resp = {
