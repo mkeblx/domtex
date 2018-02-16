@@ -4,7 +4,7 @@ const { URL } = require('url');
 var fs = require('fs');
 
 const argv = require('yargs')
-  .usage('Usage: $0 --url [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --sel [string]')
+  .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num]')
   //.demandOption(['url'])
   .argv;
 
@@ -58,53 +58,75 @@ var forceUpdate = false;
 
   await page.goto(url, { waitUntil: 'networkidle2' });
 
+  var attrs;
+
   if (argv.sel) {
-    var selector = argv.sel;
-    var el = await page.$(selector);
+    var selectors = argv.sel;
+    log('selectors: ' + selectors);
 
-    var attrs = await page.evaluate((sel) => {
+    attrs = await page.evaluate((selectors) => {
+
+      var selectors = selectors.split(',');
+
       var attrs = {};
-      var el = document.querySelector(sel);
-      if (el === null) {
-        attrs = null;
-      } else {
-        var viewportOffset = el.getBoundingClientRect();
-        attrs.x = viewportOffset.left;
-        attrs.y = viewportOffset.top;
-        attrs.width = el.offsetWidth;
-        attrs.height = el.offsetHeight;
-      }
-      return attrs;
-    }, selector);
 
-    if (attrs === null) {
+      for (var i = 0; i < selectors.length; i++) {
+        var sel = selectors[i];
+        var el = document.querySelector(sel);
+        if (el === null) {
+          attrs[sel] = null;
+        } else {
+          var viewportOffset = el.getBoundingClientRect();
+          var obj = {};
+          obj.x = viewportOffset.left;
+          obj.y = viewportOffset.top;
+          obj.width = el.offsetWidth;
+          obj.height = el.offsetHeight;
+          attrs[sel] = obj;
+        }
+      }
+
+      return attrs;
+
+    }, selectors);
+
+    if (attrs === null) { // TODO: check if empty object not null
       log('selector not found');
     } else {
+      log(Object.keys(attrs).length + ' selectors found');
       log(attrs);
-      options.clip = attrs;
     }
   }
 
-  var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
-    .substring(0, 12)+'.png';
-  var path = 'output/'+fileName;
+  var textures = {};
 
-  options.path = path;
+  for (var prop in attrs) {
+    options.clip = attrs[prop];
 
-  if (!fs.existsSync(path) || forceUpdate) {
-    await page.screenshot(options);
+    var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
+      .substring(0, 12)+'.png';
+    var path = 'output/'+fileName;
+
+    options.path = path;
+
+    if (!fs.existsSync(path) || forceUpdate) {
+      await page.screenshot(options);
+    }
+
+    var texture = {};
+    texture.path = options.path;
+    if (options.clip && options.clip.width && options.clip.height) {
+      texture.width = options.clip.width;
+      texture.height = options.clip.height;
+    }
+
+    textures[prop] = texture;
   }
 
   var resp = {
-    path: path,
     url: url,
-    width: width,
-    height: height
+    textures: textures
   };
-  if (options.clip && options.clip.width && options.clip.height) {
-    resp.width = options.clip.width;
-    resp.height = options.clip.height;
-  }
   log(JSON.stringify(resp), true);
 
   await browser.close();

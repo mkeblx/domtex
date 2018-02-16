@@ -97,14 +97,13 @@ body {
 
   <form id="form">
   <input type="text" id="url" placeholder="url" value="https://news.ycombinator.com" />
-  <input type="text" id="sel" placeholder="selector i.e. #ID" value=".pagetop">
+  <input type="text" id="sel" placeholder="selectors i.e. #ID,.container" value=".pagetop,.hnname">
   <!--<textarea id="html" placeholder="<html><h1>hello world</h1></html>"></textarea>-->
   <input type="button" value="Generate" id="generate" />
   </form>
 
   <div id="output">
     <div id="loader" class="loader hide"></div>
-    <img id="output-img" src="" />
     <textarea id="response"></textarea>
   </div>
 
@@ -153,13 +152,25 @@ function generate(url, sel, html) {
       console.log(resp);
       loader.classList.add('hide');
 
-      var path = '/'+resp.path;
-
-      console.log('path: ' + path);
       var output = document.getElementById('output');
-      var outputImg = document.getElementById('output-img');
 
-      outputImg.setAttribute('src', path);
+      // clear
+      var imgs = output.getElementsByTagName('img');
+      var numImages = imgs.length;
+      for (var i = 0; i < numImages; i++) {
+        imgs[0].parentNode.removeChild(imgs[0]);
+      }
+
+      for (var sel in resp.textures) {
+        var texture = resp.textures[sel];
+        var img = document.createElement('img');
+        img.setAttribute('width', texture.width);
+        img.setAttribute('height', texture.height);
+        var path = '/'+texture.path;
+        console.log(path);
+        img.setAttribute('src', path);
+        output.appendChild(img);
+      }
 
       var responseText = JSON.stringify(resp);
       var respEl = document.getElementById('response');

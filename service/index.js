@@ -35,7 +35,7 @@ server.on('request', (request, response) => {
   var sel = null;
   if (query.sel) {
     sel = decodeURI(query.sel);
-    console.log('selector: ' + sel);
+    console.log('selectors: ' + sel);
   }
 
 
