@@ -1,5 +1,4 @@
 // cache utils
-// currently clears cache
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');

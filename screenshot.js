@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer');
-var crypto = require('crypto');
 const { URL } = require('url');
-var fs = require('fs');
+const fs = require('fs');
+
+const util = require('./util.js');
 
 const argv = require('yargs')
   .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num]')
@@ -98,11 +99,19 @@ var forceUpdate = false;
       log(attrs);
     }
 
-    for (var prop in attrs) {
-      options.clip = attrs[prop];
+    for (const _sel in attrs) {
+      options.clip = attrs[_sel];
 
-      var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
-        .substring(0, 12)+'.png';
+      log(options);
+
+      var params = {
+        url: url,
+        sel: _sel,
+        width: width,
+        height: height
+      };
+      log(params);
+      var fileName = util.hash(params)+'.png';
       var path = 'output/'+fileName;
 
       options.path = path;
@@ -118,11 +127,19 @@ var forceUpdate = false;
         texture.height = options.clip.height;
       }
 
-      textures[prop] = texture;
+      textures[_sel] = texture;
     }
   } else { // whole page
-    var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
-      .substring(0, 12)+'.png';
+    var params = {
+      url: url,
+      width: width,
+      height: height
+    };
+    if (options.clip !== undefined) {
+      params.clip = clip;
+    }
+    log(params);
+    var fileName = util.hash(params)+'.png';
     var path = 'output/'+fileName;
 
     options.path = path;
@@ -158,8 +175,4 @@ var forceUpdate = false;
 function log(msg, force) {
   if (verbose || force)
     console.log(msg);
-}
-
-function md5(string) {
-  return crypto.createHash('md5').update(string).digest('hex');
 }

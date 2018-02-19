@@ -1,5 +1,7 @@
 const puppeteer = require('puppeteer');
-var crypto = require('crypto');
+const crypto = require('crypto');
+
+const util = require('./util.js');
 
 const argv = require('yargs')
   .usage('Usage: $0 --html [string] --w [num] --h [num]')
@@ -42,8 +44,12 @@ const argv = require('yargs')
 
   page.setContent(html);
 
-  var fileName = md5(html+width+'x'+height)
-    .substring(0,12)+'.png';
+  var params = {
+    html: html,
+    width: width,
+    height: height
+  };
+  var fileName = hash(params)+'.png';
   var path = 'output/'+fileName;
   await page.screenshot({ path: path });
 

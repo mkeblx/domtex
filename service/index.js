@@ -1,7 +1,9 @@
-var http = require('http');
-var _url = require('url');
-var querystring = require('querystring');
+const http = require('http');
+const _url = require('url');
+const querystring = require('querystring');
 const { execFile } = require('child_process');
+
+const util = require('./../util.js');
 
 var PORT = 8080;
 const server = http.createServer();
@@ -73,9 +75,9 @@ server.on('request', (request, response) => {
   }
 
 }).listen(PORT, (err) => {
+  console.log(`listening on port ${PORT}`);
+
   if (err) {
     return console.log('something bad happened', err);
   }
 });
-
-console.log(`listening on port ${PORT}`);

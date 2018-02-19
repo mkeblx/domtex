@@ -1,8 +1,8 @@
 // create image map of all links on page
 const puppeteer = require('puppeteer');
-var crypto = require('crypto');
+const crypto = require('crypto');
 const { URL } = require('url');
-var fs = require('fs');
+const fs = require('fs');
 
 const argv = require('yargs')
   .usage('Usage: $0 --url [string] --w [num] --h [num]')
