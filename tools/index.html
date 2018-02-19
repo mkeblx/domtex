@@ -39,6 +39,12 @@ body {
   width: 100%;
 }
 
+#output .texture {
+  margin-bottom: 5px;
+  border: 1px dashed #999;
+  padding: 5px;
+}
+
 .loader,
 .loader:after {
   border-radius: 50%;
@@ -159,7 +165,7 @@ function generate(url, sel, html) {
       var output = document.getElementById('output');
 
       // clear
-      var imgs = output.getElementsByTagName('img');
+      var imgs = output.getElementsByClassName('texture');
       var numImages = imgs.length;
       for (var i = 0; i < numImages; i++) {
         imgs[0].parentNode.removeChild(imgs[0]);
@@ -167,13 +173,21 @@ function generate(url, sel, html) {
 
       for (var sel in resp.textures) {
         var texture = resp.textures[sel];
+        var div = document.createElement('div');
+        div.classList.add('texture');
         var img = document.createElement('img');
         img.setAttribute('width', texture.width);
         img.setAttribute('height', texture.height);
         var path = '/'+texture.path;
         console.log(path);
         img.setAttribute('src', path);
-        output.appendChild(img);
+        div.appendChild(img);
+        var link = document.createElement('a');
+        link.setAttribute('href', path);
+        link.setAttribute('download', texture.path.replace('output/', ''));
+        link.appendChild(document.createTextNode('download'));
+        div.appendChild(link);
+        output.appendChild(div);
       }
 
       var responseText = JSON.stringify(resp);
