@@ -21,6 +21,11 @@ var forceUpdate = false;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
+  var selectors = [];
+  if (argv.sel) {
+    selectors = argv.sel.split(',');
+  }
+
   var options = {};
 
   if (argv.cx && argv.cy && argv.cw && argv.ch) {
@@ -47,38 +52,84 @@ var forceUpdate = false;
   }
 
   // early cache check
-  // TODO: handle if has selection option
+  var paths = [];
+
   var hashParams = {};
-  hashParams = {
-    url: url,
-    width: width,
-    height: height
-  };
-  if (options.clip !== undefined) {
-    hashParams.clip = clip;
-  }
-  log(hashParams);
-  var fileName = util.hash(hashParams)+'.png';
-  var path = 'output/'+fileName;
-  if (fs.existsSync(path) && !forceUpdate) {
-    var texture = {};
-    texture.path = path;
-    texture.width = width;
-    texture.height = height;
-    if (options.clip && options.clip.width && options.clip.height) {
-      texture.width = options.clip.width;
-      texture.height = options.clip.height;
-    }
-    var resp = {
-      url: url,
-      textures: {
-        'document': texture
+  if (selectors.length > 0) {
+    for (let i = 0; i < selectors.length; i++) {
+      let sel = selectors[i];
+      hashParams = {
+        url: url,
+        sel: sel,
+        width: width,
+        height: height
       }
+      log(hashParams);
+      let fileName = util.hash(hashParams)+'.png';
+      let path = 'output/'+fileName;
+      paths.push(path);
+    }
+  } else {
+    hashParams = {
+      url: url,
+      width: width,
+      height: height
     };
-    log('File found, exiting early');
+    if (options.clip !== undefined) {
+      hashParams.clip = clip;
+    }
+    log(hashParams);
+    let fileName = util.hash(hashParams)+'.png';
+    let path = 'output/'+fileName;
+    paths.push(path);
+  }
+
+  var filesFound = 0;
+
+  var textures = {};
+
+  for (let i = 0; i < paths.length; i++) {
+    let path = paths[i];
+    let sel = selectors[i];
+
+    if (fs.existsSync(path) && !forceUpdate) {
+      let texture = {};
+      if (paths.length === 1 && selectors.length === 0) {
+        texture = {
+          path: path,
+          width: width,
+          height: height
+        };
+        textures['document'] = texture;
+      } else {
+        texture = {
+          path: path
+        };
+        // TODO: get width, height from image or cache
+        textures[sel] = texture;
+      }
+
+      /*texture.width = width;
+      texture.height = height;
+      if (options.clip && options.clip.width && options.clip.height) {
+        texture.width = options.clip.width;
+        texture.height = options.clip.height;
+      }*/
+
+      filesFound++;
+    }
+
+  }
+  if (filesFound === paths.length) {
+    let resp = {
+      url: url,
+      textures: textures
+    };
+    log('Files found, exiting early');
     log(JSON.stringify(resp), true);
     return;
   }
+
 
   const browser = await puppeteer.launch({
     headless: true });
@@ -95,14 +146,10 @@ var forceUpdate = false;
   var attrs;
   var textures = {};
 
-  if (argv.sel) {
-    var selectors = argv.sel;
+  if (selectors.length > 0) {
     log('selectors: ' + selectors);
 
     attrs = await page.evaluate((selectors) => {
-
-      var selectors = selectors.split(',');
-
       var attrs = {};
 
       for (var i = 0; i < selectors.length; i++) {
@@ -122,7 +169,6 @@ var forceUpdate = false;
       }
 
       return attrs;
-
     }, selectors);
 
     if (attrs === null) { // TODO: check if empty object not null
