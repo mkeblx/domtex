@@ -46,7 +46,40 @@ var forceUpdate = false;
     height = parseInt(argv.h, 10);
   }
 
-  // TODO: avoid this setup if already in cache
+  // early cache check
+  // TODO: handle if has selection option
+  var hashParams = {};
+  hashParams = {
+    url: url,
+    width: width,
+    height: height
+  };
+  if (options.clip !== undefined) {
+    hashParams.clip = clip;
+  }
+  log(hashParams);
+  var fileName = util.hash(hashParams)+'.png';
+  var path = 'output/'+fileName;
+  if (fs.existsSync(path) && !forceUpdate) {
+    var texture = {};
+    texture.path = path;
+    texture.width = width;
+    texture.height = height;
+    if (options.clip && options.clip.width && options.clip.height) {
+      texture.width = options.clip.width;
+      texture.height = options.clip.height;
+    }
+    var resp = {
+      url: url,
+      textures: {
+        'document': texture
+      }
+    };
+    log('File found, exiting early');
+    log(JSON.stringify(resp), true);
+    return;
+  }
+
   const browser = await puppeteer.launch({
     headless: true });
 
@@ -104,14 +137,14 @@ var forceUpdate = false;
 
       log(options);
 
-      var params = {
+      hashParams = {
         url: url,
         sel: _sel,
         width: width,
         height: height
       };
-      log(params);
-      var fileName = util.hash(params)+'.png';
+      log(hashParams);
+      var fileName = util.hash(hashParams)+'.png';
       var path = 'output/'+fileName;
 
       options.path = path;
@@ -130,16 +163,16 @@ var forceUpdate = false;
       textures[_sel] = texture;
     }
   } else { // whole page
-    var params = {
+    hashParams = {
       url: url,
       width: width,
       height: height
     };
     if (options.clip !== undefined) {
-      params.clip = clip;
+      hashParams.clip = clip;
     }
-    log(params);
-    var fileName = util.hash(params)+'.png';
+    log(hashParams);
+    var fileName = util.hash(hashParams)+'.png';
     var path = 'output/'+fileName;
 
     options.path = path;

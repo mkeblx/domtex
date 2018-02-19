@@ -26,6 +26,7 @@ switch (command) {
 }
 
 function details() {
+  console.log('Cache details:');
   // TODO: also, provide # of files
   var child = exec('du -sh '+directory, function(error, stdout, stderr){
     console.log(stdout);
@@ -34,13 +35,14 @@ function details() {
 
 // clear all
 function clear() {
+  console.log('Clearing cache...');
   fs.readdir(directory, (err, files) => {
     if (err) throw err;
 
     for (const file of files) {
       if (file.charAt(0) == '.')
         continue;
-      console.log('file: ' + file);
+      console.log('file: ' + file + ' removed');
       fs.unlink(path.join(directory, file), err => {
         if (err)
           throw err;

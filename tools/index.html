@@ -127,6 +127,8 @@ function init() {
 }
 
 function generate(url, sel, html) {
+  console.time('responseTime');
+
   console.log('Generate texture:');
   if (url !== '') {
     console.log('URL: ' + url);
@@ -135,7 +137,8 @@ function generate(url, sel, html) {
     return;
   }
 
-  var domain = 'http://localhost:8080';
+  var PORT = '8080';
+  var domain = 'http://localhost:'+PORT;
   var params = {};
   params['url'] = url;
   if (sel !== '') {
@@ -149,6 +152,7 @@ function generate(url, sel, html) {
     .then(checkStatus)
     .then((resp) => resp.json())
     .then(function(resp){
+      console.timeEnd('responseTime');
       console.log(resp);
       loader.classList.add('hide');
 
