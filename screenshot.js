@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const { URL } = require('url');
 const fs = require('fs');
+const sizeOf = require('image-size');
 
 const util = require('./util.js');
 
@@ -95,26 +96,22 @@ var forceUpdate = false;
     if (fs.existsSync(path) && !forceUpdate) {
       let texture = {};
       if (paths.length === 1 && selectors.length === 0) {
+        let dimensions = sizeOf(path);
         texture = {
           path: path,
-          width: width,
-          height: height
+          width: dimensions.width,
+          height: dimensions.height
         };
         textures['document'] = texture;
       } else {
+        let dimensions = sizeOf(path);
         texture = {
-          path: path
+          path: path,
+          width: dimensions.width,
+          height: dimensions.height
         };
-        // TODO: get width, height from image or cache
         textures[sel] = texture;
       }
-
-      /*texture.width = width;
-      texture.height = height;
-      if (options.clip && options.clip.width && options.clip.height) {
-        texture.width = options.clip.width;
-        texture.height = options.clip.height;
-      }*/
 
       filesFound++;
     }
