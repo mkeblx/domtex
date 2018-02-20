@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const crypto = require('crypto');
+const fs = require('fs');
 
 const util = require('./util.js');
 
@@ -7,6 +7,9 @@ const argv = require('yargs')
   .usage('Usage: $0 --html [string] --w [num] --h [num]')
   .demandOption(['html'])
   .argv;
+
+var verbose = true;
+var forceUpdate = false;
 
 (async () => {
 
@@ -18,18 +21,33 @@ const argv = require('yargs')
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
-
-  if (argv.html) {
-    html = argv.html;
-  }
-  console.log('html:');
-  console.log(html);
+  html = argv.html;
+  log('html:');
+  log(html);
 
   if (argv.w) {
     width = parseInt(argv.w, 10);
   }
   if (argv.h) {
     height = parseInt(argv.h, 10);
+  }
+
+  var params = {
+    html: html,
+    width: width,
+    height: height
+  };
+  var fileName = util.hash(params)+'.png';
+  var path = 'output/'+fileName;
+
+  if (fs.existsSync(path) && !forceUpdate) {
+    var resp = {
+      path: path,
+      width: width,
+      height: height
+    };
+    log('response:\n' + JSON.stringify(resp), true);
+    return;
   }
 
   const browser = await puppeteer.launch({
@@ -44,23 +62,17 @@ const argv = require('yargs')
 
   page.setContent(html);
 
-  var params = {
-    html: html,
-    width: width,
-    height: height
-  };
-  var fileName = hash(params)+'.png';
-  var path = 'output/'+fileName;
   await page.screenshot({ path: path });
 
   var resp = {
     path: path
   };
-  console.log('response:\n' + JSON.stringify(resp));
+  log('response:\n' + JSON.stringify(resp), true);
 
   await browser.close();
 })();
 
-function md5(string) {
-  return crypto.createHash('md5').update(string).digest('hex');
+function log(msg, force) {
+  if (verbose || force)
+    console.log(msg);
 }
