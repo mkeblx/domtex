@@ -1,8 +1,9 @@
 // create image map of all links on page
 const puppeteer = require('puppeteer');
-const crypto = require('crypto');
 const { URL } = require('url');
 const fs = require('fs');
+
+const util = require('./util.js');
 
 const argv = require('yargs')
   .usage('Usage: $0 --url [string] --w [num] --h [num]')
@@ -84,8 +85,12 @@ log('Generate imagemap data:');
     log(links);
   }
 
-  var fileName = md5(url+JSON.stringify(options)+width+'x'+height)
-    .substring(0, 12)+'.png';
+  var params = {
+    url: url,
+    width: width,
+    height: height
+  };
+  var fileName = util.hash(params)+'.png';
   var path = 'output/'+fileName;
 
   options.path = path;
@@ -111,8 +116,4 @@ log('Generate imagemap data:');
 function log(msg, force) {
   if (verbose || force)
     console.log(msg);
-}
-
-function md5(string) {
-  return crypto.createHash('md5').update(string).digest('hex');
 }
