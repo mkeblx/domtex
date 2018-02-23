@@ -2,6 +2,8 @@ const { createCanvas, loadImage, Image } = require('canvas');
 const fs = require('fs');
 const sizeOf = require('image-size');
 
+const util = require('./util.js');
+
 console.log('creating atlas...');
 
 var dir = 'output/';
@@ -37,16 +39,24 @@ for (var i = 0; i < images.length; i++) {
 }
 
 console.log('Max width: ' + maxWidth);
+
+// (vertical) margin between textures
+var margin = 4;
+
+if (margin > 0) {
+  totalMinHeight += (textures.length-1) * margin;
+}
+
 console.log('Min height: ' + totalMinHeight);
 
 var width = 512;
 var height = 512;
 
-var powerOfTwo = true;
+var powerOfTwo = false;
 
 if (powerOfTwo) {
-  width = nextPowerOfTwo(maxWidth);
-  height = nextPowerOfTwo(totalMinHeight);
+  width = util.nextPowerOfTwo(maxWidth);
+  height = util.nextPowerOfTwo(totalMinHeight);
 } else {
   width = maxWidth;
   height = totalMinHeight;
@@ -59,7 +69,6 @@ const ctx = canvas.getContext('2d', {alpha: alpha});
 (async () => {
 
   var startY = 0;
-  var margin = 0;
 
   var maxWidth;
 
@@ -83,14 +92,3 @@ const ctx = canvas.getContext('2d', {alpha: alpha});
 
 
 })();
-
-function nextPowerOfTwo (n) {
-  if (n === 0) return 1
-  n--
-  n |= n >> 1
-  n |= n >> 2
-  n |= n >> 4
-  n |= n >> 8
-  n |= n >> 16
-  return n+1
-}
