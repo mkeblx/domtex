@@ -12,21 +12,12 @@ var images = ['97270878d94d.png','5ea510f457fa.png'];
 
 var textures = [];
 
-var maxWidth = 0;
-var maxHeight = 0;
-var totalMinHeight = 0;
-
 // get image sizes
 for (var i = 0; i < images.length; i++) {
   var img = images[i];
   let dimensions = sizeOf(dir+img);
   var w = dimensions.width;
   var h = dimensions.height;
-
-  maxWidth = Math.max(maxWidth, w);
-  maxHeight = Math.max(maxHeight, h);
-
-  totalMinHeight += h;
 
   var texture = {
     path: dir+img,
@@ -35,32 +26,19 @@ for (var i = 0; i < images.length; i++) {
   };
   textures.push(texture);
   console.log(texture);
-
 }
 
-console.log('Max width: ' + maxWidth);
-
-// (vertical) margin between textures
+// margin between textures
 var margin = 4;
-
-if (margin > 0) {
-  totalMinHeight += (textures.length-1) * margin;
-}
-
-console.log('Min height: ' + totalMinHeight);
 
 var width = 512;
 var height = 512;
 
-var powerOfTwo = false;
+var powerOfTwo = true;
 
-if (powerOfTwo) {
-  width = util.nextPowerOfTwo(maxWidth);
-  height = util.nextPowerOfTwo(totalMinHeight);
-} else {
-  width = maxWidth;
-  height = totalMinHeight;
-}
+var rect = computeRectSize(textures, margin, powerOfTwo);
+width = rect.width;
+height = rect.height;
 
 const canvas = createCanvas(width, height);
 var alpha = true; // TODO: could combine with transparent page background
@@ -69,8 +47,6 @@ const ctx = canvas.getContext('2d', {alpha: alpha});
 (async () => {
 
   var startY = 0;
-
-  var maxWidth;
 
   for (var i = 0; i < textures.length; i++) {
     await loadImage(textures[i].path).then((image) => {
@@ -92,3 +68,37 @@ const ctx = canvas.getContext('2d', {alpha: alpha});
 
 
 })();
+
+// compute size needed for rects
+// currently simple method, layed out vertically
+//  TODO: better space efficient format
+// rects: array of objects with [width, height] props
+// margin: spacing between textures
+function computeRectSize(rects, margin, powerOfTwo) {
+  var w, h;
+
+  var maxWidth = 0, maxHeight = 0;
+  var totalMinHeight = 0;
+
+  for (var i = 0; i < rects.length; i++) {
+    var rect = rects[i];
+    maxWidth = Math.max(maxWidth, rect.width);
+    maxHeight = Math.max(maxHeight, rect.height);
+
+    totalMinHeight += rect.height;
+  }
+
+  if (margin > 0) {
+    totalMinHeight += (rects.length-1) * margin;
+  }
+
+  if (powerOfTwo) {
+    w = util.nextPowerOfTwo(maxWidth);
+    h = util.nextPowerOfTwo(totalMinHeight);
+  } else {
+    w = maxWidth;
+    h = totalMinHeight;
+  }
+
+  return { width: w, height: h };
+}
