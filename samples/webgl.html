@@ -7,42 +7,102 @@
 body {
   font-family: sans-serif;
   margin: 0;
+  background-color: #fff;
+  overflow: hidden;
 }
 canvas { width: 100%; height: 100% }
 </style>
 </head>
 <body>
+  <div id="container"></div>
 <script src="js/three.min.js"></script>
 <script>
 'use strict';
 
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+var scene;
+var camera;
+var renderer;
 
-var renderer = new THREE.WebGLRenderer({
-  antialias: true
-});
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+var container;
 
-var texture = new THREE.TextureLoader().load( '/output/003e6fc95c60.png' );
-var material = new THREE.MeshBasicMaterial( { map: texture } );
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+var onClickPosition = new THREE.Vector2();
 
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+var cube;
 
-camera.position.z = 1.5;
+init();
+
+function init() {
+  container = document.getElementById( 'container' );
+
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+  renderer = new THREE.WebGLRenderer({
+    antialias: false
+  });
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  container.appendChild( renderer.domElement );
+
+  var texture = new THREE.TextureLoader().load( '/output/003e6fc95c60.png' );
+  var material = new THREE.MeshBasicMaterial( { map: texture } );
+
+  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+  cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+
+  camera.position.z = 1.5;
+
+  window.addEventListener( 'resize', onWindowResize, false );
+  container.addEventListener( 'mousedown', onMouseAction, false );
+}
 
 function animate() {
   window.requestAnimationFrame( animate );
 
-  //cube.rotation.x += 0.1;
-  cube.rotation.y += 0.007;
+  update();
+  render();
+}
 
+function update() {
+  cube.rotation.y += 0.007;
+}
+
+function render() {
   renderer.render( scene, camera );
 }
+
 animate();
+
+function onMouseAction( evt ) {
+  evt.preventDefault();
+  var array = getMousePosition( container, evt.clientX, evt.clientY );
+  onClickPosition.fromArray( array );
+  var intersects = getIntersects( onClickPosition, scene.children );
+  if ( intersects.length > 0 && intersects[ 0 ].uv ) {
+    var uv = intersects[ 0 ].uv;
+    intersects[ 0 ].object.material.map.transformUv( uv );
+    console.log( uv.x.toFixed(4), uv.y.toFixed(4) );
+  }
+}
+
+var getMousePosition = function ( dom, x, y ) {
+  var rect = dom.getBoundingClientRect();
+  return [ ( x - rect.left ) / rect.width, ( y - rect.top ) / rect.height ];
+};
+
+var getIntersects = function ( point, objects ) {
+  mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
+  raycaster.setFromCamera( mouse, camera );
+  return raycaster.intersectObjects( objects );
+};
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize( window.innerWidth, window.innerHeight );
+}
 </script>
 </body>
 </html>
