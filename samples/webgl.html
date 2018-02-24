@@ -31,13 +31,18 @@ var onClickPosition = new THREE.Vector2();
 
 var cube;
 
+var site = 'http://news.ycombinator.com';
+var reqURL = '/samples/data/hn-imagemap.json';
+
+
 init();
+animate();
 
 function init() {
   container = document.getElementById( 'container' );
 
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
 
   renderer = new THREE.WebGLRenderer({
     antialias: false
@@ -45,18 +50,33 @@ function init() {
   renderer.setSize( window.innerWidth, window.innerHeight );
   container.appendChild( renderer.domElement );
 
-  var texture = new THREE.TextureLoader().load( '/output/003e6fc95c60.png' );
-  var material = new THREE.MeshBasicMaterial( { map: texture } );
-
-  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-  cube = new THREE.Mesh( geometry, material );
-  scene.add( cube );
+  addTexturedCube();
 
   camera.position.z = 1.5;
 
   window.addEventListener( 'resize', onWindowResize, false );
   container.addEventListener( 'mousedown', onMouseAction, false );
 }
+
+// return path
+async function getPath(request) {
+  let resp = await fetch(request);
+  let data = await resp.json();
+  return data.path;
+}
+
+async function addTexturedCube() {
+  var path = await getPath(reqURL);
+  console.log(path);
+
+  var texture = new THREE.TextureLoader().load( '/'+path );
+  var material = new THREE.MeshBasicMaterial( { map: texture } );
+
+  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+  cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+}
+
 
 function animate() {
   window.requestAnimationFrame( animate );
@@ -66,14 +86,13 @@ function animate() {
 }
 
 function update() {
-  cube.rotation.y += 0.007;
+  if (cube)
+    cube.rotation.y += 0.007;
 }
 
 function render() {
   renderer.render( scene, camera );
 }
-
-animate();
 
 function onMouseAction( evt ) {
   evt.preventDefault();
