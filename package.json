@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start-service": "node service/index.js",
-    "serve": "python3 -m http.server",
+    "serve": "node serve.js",
     "test": "node tests.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/mkeblx/domtex#readme",
   "dependencies": {
     "canvas": "^2.0.0-alpha.9",
+    "express": "^4.16.2",
     "image-size": "^0.6.2",
     "puppeteer": "^1.1.0",
     "yargs": "^11.0.0"
