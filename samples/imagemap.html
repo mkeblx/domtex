@@ -49,26 +49,40 @@ function process(resp) {
   img.setAttribute('height', h);
   img.setAttribute('src', '/'+path);
 
+  // relative to absolute
   for (var i = 0; i < links.length; i++) {
     var l = links[i];
-    var href = l.href;
-    if (!href.startsWith('http') && !href.startsWith('mailto'))
-      href = url + '/' + href; // TODO: don't always want to add slash unless bare domain
-    //console.log(href);
+    if (!l.href.startsWith('http') && !l.href.startsWith('mailto')) {
+      l.href = url + (!url.endsWith('/')?'/':'') + l.href; // basic
+    }
+  }
 
-    if (l.x > w || l.y > h)
+  for (var i = 0; i < links.length; i++) {
+    var l = links[i];
+    if (!insideBox(l.x,l.y, w,h))
       continue;
 
     var coords = [l.x, l.y, Math.min(l.x+l.width, w), Math.min(l.y+l.height, h)];
 
-    var areaEl = document.createElement('area');
-    console.log(areaEl);
-    areaEl.setAttribute('shape', 'rect');
-    areaEl.setAttribute('coords', coords.join(','));
-    areaEl.setAttribute('href', href);
-    map.appendChild(areaEl);
+    var area = createRectArea(l.href, coords);
+    map.appendChild(area);
   }
 
+}
+
+function createRectArea(href, coords) {
+  var areaEl = document.createElement('area');
+  console.log(areaEl);
+  areaEl.setAttribute('shape', 'rect');
+  areaEl.setAttribute('coords', coords.join(','));
+  areaEl.setAttribute('href', href);
+  return areaEl;
+}
+
+function insideBox(x,y, w,h) {
+  if (x > w || y > h)
+    return false;
+  return true;
 }
 </script>
 </body>
