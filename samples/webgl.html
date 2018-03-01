@@ -34,6 +34,9 @@ var cube;
 var site = 'http://news.ycombinator.com';
 var reqURL = '/samples/data/hn-imagemap.json';
 
+var width = 512;
+var height = 512;
+
 
 init();
 animate();
@@ -59,14 +62,15 @@ function init() {
 }
 
 // return path
-async function getPath(request) {
+async function getData(request) {
   let resp = await fetch(request);
   let data = await resp.json();
-  return data.path;
+  return data;
 }
 
 async function addTexturedCube() {
-  var path = await getPath(reqURL);
+  var data = await getData(reqURL);
+  var path = data.path;
   console.log(path);
 
   var texture = new THREE.TextureLoader().load( '/'+path );
@@ -77,6 +81,16 @@ async function addTexturedCube() {
   scene.add( cube );
 }
 
+function convertUVToPosition(uv) {
+  var x = Math.round(uv.x * width);
+  var y = Math.round(uv.y * height);
+  console.log(x, y);
+}
+
+// check
+function checkMap() {
+
+}
 
 function animate() {
   window.requestAnimationFrame( animate );
@@ -102,7 +116,9 @@ function onMouseAction( evt ) {
   if ( intersects.length > 0 && intersects[ 0 ].uv ) {
     var uv = intersects[ 0 ].uv;
     intersects[ 0 ].object.material.map.transformUv( uv );
-    console.log( uv.x.toFixed(4), uv.y.toFixed(4) );
+    var uvs = { x: uv.x.toFixed(4), y: uv.y.toFixed(4) };
+    console.log( uvs );
+    convertUVToPosition(uvs);
   }
 }
 
