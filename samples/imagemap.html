@@ -4,21 +4,52 @@
   <meta charset="utf-8">
   <title>imagemap test</title>
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  margin: 5px 0px;
+}
+
 #container {
   border: 2px solid black;
-  padding: 5px;
+  padding: 0;
+  margin-top: 10px;
   min-width: 10px;
   min-height: 10px;
   display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+#container img {
+  margin: 0;
+  display: block;
+}
+
+#container a {
+  position: absolute;
+  display: inline-block;
+}
+
+#container.boxes a {
+  outline: 1px solid rgba(0,0,255, 0.25);
 }
 </style>
 </head>
 <body>
   <h1>Image map test</h1>
 
+  <input type="button" value="Toggle Boxes" id="toggle">
+  <br>
+
   <div id="container">
     <img id="img" src="" usemap="#links-map" />
-
     <map name="links-map" id="linksmap">
     </map>
   </div>
@@ -26,9 +57,18 @@
 <script>
 'use strict';
 
+var useArea = true;
+var showBoxes = true;
+
 var container = document.getElementById('container');
+var toggle = document.getElementById('toggle');
 var img = document.getElementById('img');
 var map = document.getElementById('linksmap');
+
+toggle.addEventListener('click', function(){
+  showBoxes = !showBoxes;
+  container.classList.toggle('boxes');
+});
 
 var file = 'data/hn-imagemap.json';
 fetch(file)
@@ -62,12 +102,29 @@ function process(resp) {
     if (!insideBox(l.x,l.y, w,h))
       continue;
 
-    var coords = [l.x, l.y, Math.min(l.x+l.width, w), Math.min(l.y+l.height, h)];
-
-    var area = createRectArea(l.href, coords);
-    map.appendChild(area);
+    if (useArea) {
+      var coords = [l.x, l.y, Math.min(l.x+l.width, w), Math.min(l.y+l.height, h)];
+      var area = createRectArea(l.href, coords);
+      map.appendChild(area);
+    }
+    if (showBoxes) {
+      var coords = [l.x, l.y, l.width, l.height];
+      var a = createLink(l.href, coords);
+      container.appendChild(a);
+    }
   }
 
+}
+
+function createLink(href, coords) {
+  var a = document.createElement('a');
+  a.setAttribute('href', href);
+  a.style.left = coords[0]+'px';
+  a.style.top = coords[1]+'px';
+  a.style.width = coords[2]+'px';
+  a.style.height = coords[3]+'px';
+  console.log(a);
+  return a;
 }
 
 function createRectArea(href, coords) {
