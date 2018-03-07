@@ -89,14 +89,6 @@ function process(resp) {
   img.setAttribute('height', h);
   img.setAttribute('src', '/'+path);
 
-  // relative to absolute
-  for (var i = 0; i < links.length; i++) {
-    var l = links[i];
-    if (!l.href.startsWith('http') && !l.href.startsWith('mailto')) {
-      l.href = url + (!url.endsWith('/')?'/':'') + l.href; // basic
-    }
-  }
-
   for (var i = 0; i < links.length; i++) {
     var l = links[i];
     if (!insideBox(l.x,l.y, w,h))

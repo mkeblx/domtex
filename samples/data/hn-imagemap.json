@@ -5,508 +5,494 @@
   "height": 512,
   "links": [
     {
-      "href": "https://news.ycombinator.com",
+      "href": "https://news.ycombinator.com/",
       "x": 2,
       "y": 18,
       "width": 20,
       "height": 16
     },
     {
-      "href": "news",
+      "href": "https://news.ycombinator.com/news",
       "x": 31,
       "y": 4,
       "width": 110,
       "height": 18
     },
     {
-      "href": "newest",
+      "href": "https://news.ycombinator.com/newest",
       "x": 31,
       "y": 21,
       "width": 25,
       "height": 15
     },
     {
-      "href": "newcomments",
+      "href": "https://news.ycombinator.com/newcomments",
       "x": 69,
       "y": 21,
       "width": 63,
       "height": 15
     },
     {
-      "href": "show",
+      "href": "https://news.ycombinator.com/show",
       "x": 145,
       "y": 21,
       "width": 31,
       "height": 15
     },
     {
-      "href": "ask",
+      "href": "https://news.ycombinator.com/ask",
       "x": 190,
       "y": 21,
       "width": 20,
       "height": 15
     },
     {
-      "href": "jobs",
+      "href": "https://news.ycombinator.com/jobs",
       "x": 225,
       "y": 21,
       "width": 25,
       "height": 15
     },
     {
-      "href": "submit",
+      "href": "https://news.ycombinator.com/submit",
       "x": 264,
       "y": 21,
       "width": 41,
       "height": 15
     },
     {
-      "href": "login?goto=news",
+      "href": "https://news.ycombinator.com/login?goto=news",
       "x": 472,
       "y": 13,
       "width": 29,
       "height": 15
     },
     {
-      "href": "vote?id=16415271&how=up&goto=news",
+      "href": "https://news.ycombinator.com/vote?id=16532788&how=up&goto=news",
       "x": 24,
       "y": 55,
       "width": 18,
       "height": 10
     },
     {
-      "href": "https://www.engadget.com/2018/02/15/crispr-detect-hpv-and-zika/",
+      "href": "https://blog.coinbase.com/announcing-coinbase-index-fund-3925fbf548db",
       "x": 42,
       "y": 53,
-      "width": 360,
+      "width": 155,
       "height": 18
     },
     {
-      "href": "from?site=engadget.com",
-      "x": 410,
+      "href": "https://news.ycombinator.com/from?site=coinbase.com",
+      "x": 205,
       "y": 57,
-      "width": 76,
+      "width": 73,
       "height": 13
     },
     {
-      "href": "user?id=rbanffy",
+      "href": "https://news.ycombinator.com/user?id=smaili",
       "x": 128,
       "y": 74,
-      "width": 43,
+      "width": 35,
       "height": 15
     },
     {
-      "href": "item?id=16415271",
-      "x": 175,
+      "href": "https://news.ycombinator.com/item?id=16532788",
+      "x": 167,
       "y": 74,
       "width": 72,
       "height": 15
     },
     {
-      "href": "hide?id=16415271&goto=news",
-      "x": 261,
+      "href": "https://news.ycombinator.com/hide?id=16532788&goto=news",
+      "x": 253,
       "y": 74,
       "width": 25,
       "height": 15
     },
     {
-      "href": "item?id=16415271",
-      "x": 301,
+      "href": "https://news.ycombinator.com/item?id=16532788",
+      "x": 293,
       "y": 74,
-      "width": 82,
+      "width": 90,
       "height": 15
     },
     {
-      "href": "vote?id=16413917&how=up&goto=news",
+      "href": "https://news.ycombinator.com/vote?id=16533083&how=up&goto=news",
       "x": 24,
       "y": 97,
       "width": 18,
       "height": 10
     },
     {
-      "href": "http://mrale.ph/blog/2018/02/03/maybe-you-dont-need-rust-to-speed-up-your-js.html",
+      "href": "https://stackimpact.com/blog/practical-golang-benchmarks/",
       "x": 42,
-      "y": 94,
-      "width": 437,
+      "y": 95,
+      "width": 182,
       "height": 18
     },
     {
-      "href": "from?site=mrale.ph",
-      "x": 46,
-      "y": 114,
-      "width": 48,
+      "href": "https://news.ycombinator.com/from?site=stackimpact.com",
+      "x": 232,
+      "y": 99,
+      "width": 90,
       "height": 13
     },
     {
-      "href": "user?id=youngtaff",
-      "x": 128,
-      "y": 130,
-      "width": 57,
-      "height": 15
-    },
-    {
-      "href": "item?id=16413917",
-      "x": 190,
-      "y": 130,
-      "width": 72,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16413917&goto=news",
-      "x": 276,
-      "y": 130,
-      "width": 26,
-      "height": 15
-    },
-    {
-      "href": "item?id=16413917",
-      "x": 315,
-      "y": 130,
-      "width": 89,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16415178&how=up&goto=news",
-      "x": 24,
-      "y": 153,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "http://nautil.us/issue/38/noise/this-is-your-brain-on-silence-rp",
-      "x": 42,
-      "y": 151,
-      "width": 374,
-      "height": 18
-    },
-    {
-      "href": "from?site=nautil.us",
-      "x": 424,
-      "y": 155,
-      "width": 46,
-      "height": 13
-    },
-    {
-      "href": "user?id=dnetesn",
-      "x": 128,
-      "y": 172,
-      "width": 48,
-      "height": 15
-    },
-    {
-      "href": "item?id=16415178",
-      "x": 180,
-      "y": 172,
-      "width": 72,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16415178&goto=news",
-      "x": 266,
-      "y": 172,
-      "width": 25,
-      "height": 15
-    },
-    {
-      "href": "item?id=16415178",
-      "x": 306,
-      "y": 172,
-      "width": 82,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16413668&how=up&goto=news",
-      "x": 24,
-      "y": 195,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "https://blog.realkinetic.com/elm-changed-my-mind-about-unpopular-languages-190a23f4a834",
-      "x": 42,
-      "y": 192,
-      "width": 371,
-      "height": 18
-    },
-    {
-      "href": "from?site=realkinetic.com",
-      "x": 46,
-      "y": 212,
-      "width": 81,
-      "height": 13
-    },
-    {
-      "href": "user?id=lyddonb",
-      "x": 128,
-      "y": 228,
-      "width": 47,
-      "height": 15
-    },
-    {
-      "href": "item?id=16413668",
-      "x": 180,
-      "y": 228,
-      "width": 72,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16413668&goto=news",
-      "x": 266,
-      "y": 228,
-      "width": 26,
-      "height": 15
-    },
-    {
-      "href": "item?id=16413668",
-      "x": 305,
-      "y": 228,
-      "width": 89,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16415051&how=up&goto=news",
-      "x": 24,
-      "y": 251,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "https://ide.onelang.io",
-      "x": 42,
-      "y": 248,
-      "width": 407,
-      "height": 18
-    },
-    {
-      "href": "from?site=onelang.io",
-      "x": 46,
-      "y": 268,
-      "width": 55,
-      "height": 13
-    },
-    {
-      "href": "user?id=GordonS",
-      "x": 128,
-      "y": 284,
-      "width": 52,
-      "height": 15
-    },
-    {
-      "href": "item?id=16415051",
-      "x": 185,
-      "y": 284,
-      "width": 72,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16415051&goto=news",
-      "x": 270,
-      "y": 284,
-      "width": 25,
-      "height": 15
-    },
-    {
-      "href": "item?id=16415051",
-      "x": 310,
-      "y": 284,
-      "width": 82,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16416775&how=up&goto=news",
-      "x": 24,
-      "y": 307,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "https://www.nytimes.com/2018/02/19/technology/ai-researchers-desks-boss.html?rref=collection%2Fsectioncollection%2Ftechnology&action=click&contentCollection=technology&region=stream&module=stream_unit&version=latest&contentPlacement=2&pgtype=sectionfront",
-      "x": 42,
-      "y": 304,
-      "width": 443,
-      "height": 18
-    },
-    {
-      "href": "from?site=nytimes.com",
-      "x": 46,
-      "y": 324,
-      "width": 69,
-      "height": 13
-    },
-    {
-      "href": "user?id=IntronExon",
-      "x": 113,
-      "y": 340,
-      "width": 67,
-      "height": 15
-    },
-    {
-      "href": "item?id=16416775",
-      "x": 184,
-      "y": 340,
-      "width": 94,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16416775&goto=news",
-      "x": 292,
-      "y": 340,
-      "width": 26,
-      "height": 15
-    },
-    {
-      "href": "item?id=16416775",
-      "x": 331,
-      "y": 340,
-      "width": 43,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16415912&how=up&goto=news",
-      "x": 24,
-      "y": 363,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "https://github.com/mxgmn/WaveFunctionCollapse",
-      "x": 42,
-      "y": 360,
-      "width": 425,
-      "height": 36
-    },
-    {
-      "href": "from?site=github.com",
-      "x": 198,
-      "y": 382,
-      "width": 60,
-      "height": 13
-    },
-    {
-      "href": "user?id=_Microft",
+      "href": "https://news.ycombinator.com/user?id=minaandrawos",
       "x": 121,
-      "y": 398,
-      "width": 49,
+      "y": 116,
+      "width": 88,
       "height": 15
     },
     {
-      "href": "item?id=16415912",
-      "x": 173,
-      "y": 398,
+      "href": "https://news.ycombinator.com/item?id=16533083",
+      "x": 213,
+      "y": 116,
       "width": 72,
       "height": 15
     },
     {
-      "href": "hide?id=16415912&goto=news",
-      "x": 259,
-      "y": 398,
+      "href": "https://news.ycombinator.com/hide?id=16533083&goto=news",
+      "x": 298,
+      "y": 116,
       "width": 25,
       "height": 15
     },
     {
-      "href": "item?id=16415912",
-      "x": 299,
-      "y": 398,
+      "href": "https://news.ycombinator.com/item?id=16533083",
+      "x": 338,
+      "y": 116,
       "width": 75,
       "height": 15
     },
     {
-      "href": "vote?id=16414839&how=up&goto=news",
+      "href": "https://news.ycombinator.com/vote?id=16530603&how=up&goto=news",
       "x": 24,
-      "y": 421,
+      "y": 139,
       "width": 18,
       "height": 10
     },
     {
-      "href": "https://news.stanford.edu/pr/2011/pr-famine-040411.html",
+      "href": "https://www.citusdata.com/blog/2018/03/06/postgres-planner-and-its-usage-of-statistics/",
       "x": 42,
-      "y": 418,
-      "width": 459,
-      "height": 36
-    },
-    {
-      "href": "from?site=stanford.edu",
-      "x": 162,
-      "y": 440,
-      "width": 68,
-      "height": 13
-    },
-    {
-      "href": "user?id=rutenspitz",
-      "x": 121,
-      "y": 456,
-      "width": 60,
-      "height": 15
-    },
-    {
-      "href": "item?id=16414839",
-      "x": 185,
-      "y": 456,
-      "width": 71,
-      "height": 15
-    },
-    {
-      "href": "hide?id=16414839&goto=news",
-      "x": 271,
-      "y": 456,
-      "width": 26,
-      "height": 15
-    },
-    {
-      "href": "item?id=16414839",
-      "x": 310,
-      "y": 456,
-      "width": 82,
-      "height": 15
-    },
-    {
-      "href": "vote?id=16413782&how=up&goto=news",
-      "x": 24,
-      "y": 479,
-      "width": 18,
-      "height": 10
-    },
-    {
-      "href": "https://instantdomainsearch.com/articles/streaming_json_jsons/",
-      "x": 42,
-      "y": 476,
-      "width": 361,
+      "y": 137,
+      "width": 253,
       "height": 18
     },
     {
-      "href": "from?site=instantdomainsearch.com",
-      "x": 46,
-      "y": 496,
-      "width": 138,
+      "href": "https://news.ycombinator.com/from?site=citusdata.com",
+      "x": 303,
+      "y": 141,
+      "width": 75,
       "height": 13
     },
     {
-      "href": "user?id=beau",
+      "href": "https://news.ycombinator.com/user?id=samber",
       "x": 128,
-      "y": 512,
-      "width": 29,
+      "y": 158,
+      "width": 45,
       "height": 15
     },
     {
-      "href": "item?id=16413782",
-      "x": 162,
-      "y": 512,
+      "href": "https://news.ycombinator.com/item?id=16530603",
+      "x": 177,
+      "y": 158,
       "width": 72,
       "height": 15
     },
     {
-      "href": "hide?id=16413782&goto=news",
-      "x": 248,
-      "y": 512,
+      "href": "https://news.ycombinator.com/hide?id=16530603&goto=news",
+      "x": 263,
+      "y": 158,
+      "width": 25,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16530603",
+      "x": 302,
+      "y": 158,
+      "width": 74,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/vote?id=16530506&how=up&goto=news",
+      "x": 24,
+      "y": 181,
+      "width": 18,
+      "height": 10
+    },
+    {
+      "href": "http://museum.wa.gov.au/about/latest-news/132-year-old-message-bottle-found-on-wa-beach",
+      "x": 42,
+      "y": 178,
+      "width": 434,
+      "height": 36
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=wa.gov.au",
+      "x": 94,
+      "y": 200,
+      "width": 56,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/user?id=Someone",
+      "x": 128,
+      "y": 216,
+      "width": 56,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16530506",
+      "x": 189,
+      "y": 216,
+      "width": 72,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16530506&goto=news",
+      "x": 275,
+      "y": 216,
       "width": 26,
       "height": 15
     },
     {
-      "href": "item?id=16413782",
-      "x": 287,
-      "y": 512,
+      "href": "https://news.ycombinator.com/item?id=16530506",
+      "x": 314,
+      "y": 216,
       "width": 82,
       "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/vote?id=16529335&how=up&goto=news",
+      "x": 24,
+      "y": 239,
+      "width": 18,
+      "height": 10
+    },
+    {
+      "href": "https://techcrunch.com/2018/03/06/uber-self-driving-trucks-are-now-moving-cargo-for-uber-freight-customers/",
+      "x": 42,
+      "y": 236,
+      "width": 465,
+      "height": 36
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=techcrunch.com",
+      "x": 126,
+      "y": 258,
+      "width": 85,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/user?id=wil_wheat_on",
+      "x": 128,
+      "y": 274,
+      "width": 83,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529335",
+      "x": 215,
+      "y": 274,
+      "width": 79,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16529335&goto=news",
+      "x": 309,
+      "y": 274,
+      "width": 26,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529335",
+      "x": 348,
+      "y": 274,
+      "width": 89,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/vote?id=16529600&how=up&goto=news",
+      "x": 24,
+      "y": 297,
+      "width": 18,
+      "height": 10
+    },
+    {
+      "href": "https://blog.ycombinator.com/updated-request-for-startups/",
+      "x": 42,
+      "y": 295,
+      "width": 219,
+      "height": 18
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=ycombinator.com",
+      "x": 269,
+      "y": 299,
+      "width": 93,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/user?id=craigcannon",
+      "x": 128,
+      "y": 316,
+      "width": 73,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529600",
+      "x": 205,
+      "y": 316,
+      "width": 72,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16529600&goto=news",
+      "x": 291,
+      "y": 316,
+      "width": 25,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529600",
+      "x": 330,
+      "y": 316,
+      "width": 90,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/vote?id=16529557&how=up&goto=news",
+      "x": 24,
+      "y": 339,
+      "width": 18,
+      "height": 10
+    },
+    {
+      "href": "https://investmentcalculator.io/",
+      "x": 42,
+      "y": 336,
+      "width": 408,
+      "height": 36
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=investmentcalculator.io",
+      "x": 121,
+      "y": 358,
+      "width": 124,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/user?id=Calebbarclay",
+      "x": 128,
+      "y": 374,
+      "width": 77,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529557",
+      "x": 210,
+      "y": 374,
+      "width": 80,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16529557&goto=news",
+      "x": 303,
+      "y": 374,
+      "width": 26,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16529557",
+      "x": 342,
+      "y": 374,
+      "width": 90,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/vote?id=16533475&how=up&goto=news",
+      "x": 24,
+      "y": 397,
+      "width": 18,
+      "height": 10
+    },
+    {
+      "href": "https://blog.particle.io/2018/03/06/proto-to-prod/",
+      "x": 42,
+      "y": 394,
+      "width": 412,
+      "height": 36
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=particle.io",
+      "x": 121,
+      "y": 416,
+      "width": 53,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/user?id=gb9337",
+      "x": 113,
+      "y": 432,
+      "width": 46,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16533475",
+      "x": 163,
+      "y": 432,
+      "width": 66,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16533475&goto=news",
+      "x": 242,
+      "y": 432,
+      "width": 25,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16533475",
+      "x": 282,
+      "y": 432,
+      "width": 74,
+      "height": 15
+    },
+    {
+      "href": "https://www.fullstackacademy.com/careers",
+      "x": 42,
+      "y": 452,
+      "width": 431,
+      "height": 36
+    },
+    {
+      "href": "https://news.ycombinator.com/from?site=fullstackacademy.com",
+      "x": 158,
+      "y": 474,
+      "width": 118,
+      "height": 13
+    },
+    {
+      "href": "https://news.ycombinator.com/item?id=16533676",
+      "x": 42,
+      "y": 490,
+      "width": 94,
+      "height": 15
+    },
+    {
+      "href": "https://news.ycombinator.com/hide?id=16533676&goto=news",
+      "x": 149,
+      "y": 490,
+      "width": 25,
+      "height": 15
+    },
+    {
+      "href": "https://bellard.org/libbf/",
+      "x": 42,
+      "y": 510,
+      "width": 439,
+      "height": 36
     }
   ]
 }
