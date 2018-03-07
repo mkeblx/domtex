@@ -23,7 +23,7 @@ body {
   border: 1px solid black;
   padding: 5px;
   min-height: 10px;
-  min-width: 10px;
+  min-width: 500px;
   display: inline-block;
   clear: both;
   margin-top: 10px;
@@ -37,6 +37,7 @@ body {
 
 #output textarea {
   width: 100%;
+  font-family: monospace;
 }
 
 #output .texture {
@@ -110,7 +111,8 @@ body {
 
   <div id="output">
     <div id="loader" class="loader hide"></div>
-    <textarea id="response"></textarea>
+    <div id="textures"></div>
+    <textarea id="response" rows="8"></textarea>
   </div>
 
 </div>
@@ -118,6 +120,7 @@ body {
 'use strict';
 
 var loader = document.getElementById('loader');
+var textures = document.getElementById('textures');
 
 function init() {
   var genBtn = document.getElementById('generate');
@@ -162,8 +165,6 @@ function generate(url, sel, html) {
       console.log(resp);
       loader.classList.add('hide');
 
-      var output = document.getElementById('output');
-
       // clear
       var imgs = output.getElementsByClassName('texture');
       var numImages = imgs.length;
@@ -187,10 +188,10 @@ function generate(url, sel, html) {
         link.setAttribute('download', texture.path.replace('output/', ''));
         link.appendChild(document.createTextNode('download'));
         div.appendChild(link);
-        output.appendChild(div);
+        textures.appendChild(div);
       }
 
-      var responseText = JSON.stringify(resp);
+      var responseText = JSON.stringify(resp, null, 2);
       var respEl = document.getElementById('response');
       respEl.value = responseText;
     }).catch((error) => {
