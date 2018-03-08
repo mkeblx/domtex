@@ -39,6 +39,10 @@ server.on('request', (request, response) => {
     sel = decodeURI(query.sel);
     console.log('selectors: ' + sel);
   }
+  var force = null;
+  if (query.force) {
+    force = true;
+  }
 
 
   request.on('error', (err) => {
@@ -53,6 +57,10 @@ server.on('request', (request, response) => {
     args.push('--url='+siteUrl);
     if (sel)
       args.push('--sel='+sel);
+    if (force)
+      args.push('--force');
+
+    console.log(args);
 
     const child = execFile('node', args, (error, stdout, stderr) => {
       console.log('callback');

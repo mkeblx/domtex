@@ -153,6 +153,10 @@ function generate(url, sel, html) {
   if (sel !== '') {
     params['sel'] = sel;
   }
+  var forceUpdate = true;
+  if (forceUpdate) {
+    params['force'] = forceUpdate;
+  }
   var reqURL = domain+'/generate?'+serialize(params);
 
   console.log(reqURL);

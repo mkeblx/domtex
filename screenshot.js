@@ -6,7 +6,7 @@ const sizeOf = require('image-size');
 const util = require('./util.js');
 
 const argv = require('yargs')
-  .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num]')
+  .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --force')
   //.demandOption(['url'])
   .argv;
 
@@ -21,6 +21,8 @@ var forceUpdate = false;
   var url = DEFAULT_URL;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
+
+  forceUpdate = false || argv.force;
 
   var selectors = [];
   if (argv.sel) {
