@@ -116,6 +116,7 @@ body {
   </div>
 
 </div>
+<script src="js/domtex.js"></script>
 <script>
 'use strict';
 
@@ -166,7 +167,7 @@ function generate(url, sel, html) {
   if (forceUpdate) {
     params['force'] = forceUpdate;
   }
-  var reqURL = domain+'/generate?'+serialize(params);
+  var reqURL = generateRequestUrl(params);
 
   console.log(reqURL);
 
@@ -216,15 +217,6 @@ function checkStatus(response) {
     error.response = response;
     throw error;
   }
-}
-
-var serialize = function(obj) {
-  var str = [];
-  for(var p in obj)
-    if (obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-    }
-  return str.join('&');
 }
 
 init();
