@@ -6,7 +6,7 @@ const sizeOf = require('image-size');
 const util = require('./util.js');
 
 const argv = require('yargs')
-  .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --force')
+  .usage('Usage: $0 --url [string] --sel [string] --w [num] --h [num] --cx [num] --cy[num] --cw [num] --ch [num] --atlas --fullpage --force')
   //.demandOption(['url'])
   .argv;
 
@@ -21,6 +21,18 @@ var forceUpdate = false;
   var url = DEFAULT_URL;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
+
+  var atlas = false;
+  if (argv.atlas) {
+    atlas = true;
+  }
+  var fullpage = false;
+  if (argv.fullpage) {
+    fullpage = true;
+    if (argv.h) {
+      console.log('Provide only height or fullpage parameter');
+    }
+  }
 
   forceUpdate = false || argv.force;
 
@@ -207,7 +219,12 @@ var forceUpdate = false;
 
       textures[_sel] = texture;
     }
-  } else { // whole page
+
+    // clear
+    options.clip = null;
+  }
+  var includePage = true;
+  if (selectors.length == 0 || includePage) {
     hashParams = {
       url: url,
       width: width,
