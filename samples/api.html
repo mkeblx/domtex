@@ -127,6 +127,15 @@ function init() {
   genBtn.addEventListener('click', function(ev){
     loader.classList.remove('hide');
 
+    // clear
+    var imgs = textures.getElementsByClassName('texture');
+    var numImages = imgs.length;
+    for (var i = 0; i < numImages; i++) {
+      imgs[0].parentNode.removeChild(imgs[0]);
+    }
+    document.getElementById('response').value = '';
+
+
     var url = document.getElementById('url').value;
     var sel = document.getElementById('sel').value;
     var html = '';//document.getElementById('html').value;
@@ -168,13 +177,6 @@ function generate(url, sel, html) {
       console.timeEnd('responseTime');
       console.log(resp);
       loader.classList.add('hide');
-
-      // clear
-      var imgs = output.getElementsByClassName('texture');
-      var numImages = imgs.length;
-      for (var i = 0; i < numImages; i++) {
-        imgs[0].parentNode.removeChild(imgs[0]);
-      }
 
       for (var sel in resp.textures) {
         var texture = resp.textures[sel];
