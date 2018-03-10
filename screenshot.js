@@ -22,7 +22,7 @@ var forceUpdate = false;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
-  var atlas = false;
+  var atlas = true;
   if (argv.atlas) {
     atlas = true;
   }
@@ -157,6 +157,39 @@ var forceUpdate = false;
   var attrs;
   var textures = {};
 
+
+  var includePage = true;
+  if (selectors.length == 0 || includePage || atlas) {
+    hashParams = {
+      url: url,
+      width: width,
+      height: height
+    };
+    if (options.clip !== undefined) {
+      hashParams.clip = clip;
+    }
+    log(hashParams);
+    var fileName = util.hash(hashParams)+'.png';
+    var path = 'output/'+fileName;
+
+    options.path = path;
+
+
+    if (!fs.existsSync(path) || forceUpdate) {
+      await page.screenshot(options);
+    }
+
+    var texture = {};
+    texture.path = options.path;
+    texture.width = width;
+    texture.height = height;
+    if (options.clip && options.clip.width && options.clip.height) {
+      texture.width = options.clip.width;
+      texture.height = options.clip.height;
+    }
+
+    textures['document'] = texture;
+  }
   if (selectors.length > 0) {
     log('selectors: ' + selectors);
 
@@ -190,31 +223,37 @@ var forceUpdate = false;
     }
 
     for (const _sel in attrs) {
-      options.clip = attrs[_sel];
-
+      var texture = {};
+      var _attrs = attrs[_sel];
+      options.clip = _attrs;
       log(options);
 
-      hashParams = {
-        url: url,
-        sel: _sel,
-        width: width,
-        height: height
-      };
-      log(hashParams);
-      var fileName = util.hash(hashParams)+'.png';
-      var path = 'output/'+fileName;
+      if (atlas) {
+        texture.path = textures['document'].path;
+        texture.x = _attrs.x;
+        texture.y = _attrs.y;
+        texture.width = _attrs.width;
+        texture.height = _attrs.height;
+      } else {
+        hashParams = {
+          url: url,
+          sel: _sel,
+          width: width,
+          height: height
+        };
+        log(hashParams);
+        var fileName = util.hash(hashParams)+'.png';
+        var path = 'output/'+fileName;
 
-      options.path = path;
+        options.path = path;
 
-      if (!fs.existsSync(path) || forceUpdate) {
-        await page.screenshot(options);
-      }
+        if (!fs.existsSync(path) || forceUpdate) {
+          await page.screenshot(options);
+        }
 
-      var texture = {};
-      texture.path = options.path;
-      if (options.clip && options.clip.width && options.clip.height) {
-        texture.width = options.clip.width;
-        texture.height = options.clip.height;
+        texture.path = options.path;
+        texture.width = _attrs.width;
+        texture.height = _attrs.height;
       }
 
       textures[_sel] = texture;
@@ -222,38 +261,6 @@ var forceUpdate = false;
 
     // clear
     options.clip = null;
-  }
-  var includePage = true;
-  if (selectors.length == 0 || includePage) {
-    hashParams = {
-      url: url,
-      width: width,
-      height: height
-    };
-    if (options.clip !== undefined) {
-      hashParams.clip = clip;
-    }
-    log(hashParams);
-    var fileName = util.hash(hashParams)+'.png';
-    var path = 'output/'+fileName;
-
-    options.path = path;
-
-
-    if (!fs.existsSync(path) || forceUpdate) {
-      await page.screenshot(options);
-    }
-
-    var texture = {};
-    texture.path = options.path;
-    texture.width = width;
-    texture.height = height;
-    if (options.clip && options.clip.width && options.clip.height) {
-      texture.width = options.clip.width;
-      texture.height = options.clip.height;
-    }
-
-    textures['document'] = texture;
   }
 
   var resp = {
