@@ -61,7 +61,8 @@ function init() {
     console.log(position);
 
     let link = getLinkAt(links, position);
-    console.log('clicked: ' + link.href);
+    if (link)
+      console.log('clicked: ' + link.href);
   });
 
   camera.position.z = 1.5;
@@ -96,8 +97,8 @@ function getLinkAt(links, position) {
   // reverse order to match inverse tree order
   // likely gets correct link if two on top
   for (var i = links.length-1; i >= 0; i--) {
-    link = links[i];
-    if (insideBox(position[0], position[1], link)) {
+    if (insideBox(position[0], position[1], links[i])) {
+      link = links[i];
       break;
     }
   }
