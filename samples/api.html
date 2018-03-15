@@ -109,6 +109,7 @@ a:visited {
   <form id="form">
   <input type="text" id="url" placeholder="url" value="https://news.ycombinator.com" />
   <input type="text" id="sel" placeholder="selectors i.e. #ID,.container" value=".pagetop,.hnname">
+  <input type="checkbox" id="atlas" />
   <!--<textarea id="html" placeholder="<html><h1>hello world</h1></html>"></textarea>-->
   <input type="button" value="Generate" id="generate" />
   </form>
@@ -124,10 +125,11 @@ a:visited {
 <script>
 'use strict';
 
-var atlas = true;
+var atlas = false;
 
 var loader = document.getElementById('loader');
 var textures = document.getElementById('textures');
+var atlasEl = document.getElementById('atlas');
 
 function init() {
   var genBtn = document.getElementById('generate');
@@ -147,6 +149,12 @@ function init() {
     var sel = document.getElementById('sel').value;
     var html = '';//document.getElementById('html').value;
 
+    if (atlasEl.checked) {
+      atlas = true;
+    } else {
+      atlas = false;
+    }
+
     generate(url, sel, html);
   });
 }
@@ -162,8 +170,6 @@ function generate(url, sel, html) {
     return;
   }
 
-  var PORT = '8080';
-  var domain = 'http://localhost:'+PORT;
   var params = {};
   params['url'] = url;
   if (sel !== '') {
@@ -172,6 +178,9 @@ function generate(url, sel, html) {
   var forceUpdate = true;
   if (forceUpdate) {
     params['force'] = forceUpdate;
+  }
+  if (atlas) {
+    params['atlas'] = true;
   }
   var reqURL = generateRequestUrl(params);
 

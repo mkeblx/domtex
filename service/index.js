@@ -43,6 +43,10 @@ server.on('request', (request, response) => {
   if (query.force) {
     force = true;
   }
+  var atlas = null;
+  if (query.atlas) {
+    atlas = true;
+  }
 
 
   request.on('error', (err) => {
@@ -59,6 +63,8 @@ server.on('request', (request, response) => {
       args.push('--sel='+sel);
     if (force)
       args.push('--force');
+    if (atlas)
+      args.push('--atlas');
 
     console.log(args);
 

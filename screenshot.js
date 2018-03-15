@@ -22,7 +22,7 @@ var forceUpdate = false;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
 
-  var atlas = true;
+  var atlas = false;
   if (argv.atlas) {
     atlas = true;
   }
@@ -265,7 +265,8 @@ var forceUpdate = false;
 
   var resp = {
     url: url,
-    textures: textures
+    textures: textures,
+    atlas: atlas
   };
   log(JSON.stringify(resp), true);
 
