@@ -40,11 +40,12 @@ server.on('request', (request, response) => {
     console.log('selectors: ' + sel);
   }
   var force = null;
-  if (query.force) {
+  if (query.force && query.force === 'true') {
     force = true;
   }
   var atlas = null;
-  if (query.atlas) {
+  if (query.atlas && query.atlas === 'true') {
+    console.log('atlas is true...');
     atlas = true;
   }
 

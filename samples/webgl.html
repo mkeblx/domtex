@@ -32,10 +32,12 @@ var onClickPosition = new THREE.Vector2();
 
 var cube;
 
+var _tex;
+
 var reqURL;
-var site = 'http://news.ycombinator.com';
+var site = 'https://news.ycombinator.com';
 var sels = ['.pagetop','.hnname'];
-var atlas = false;
+var atlas = true;
 var force = true;
 var params = {
   url: site,
@@ -67,7 +69,7 @@ function init() {
     console.log(position);
   });
 
-  camera.position.z = 1.5;
+  camera.position.z = 1.1;
 
   window.addEventListener( 'resize', onWindowResize, false );
 
@@ -89,6 +91,7 @@ async function addElements() {
   console.log(data);
 
   var i = 0;
+  var doc = data.textures['document'];
   for (let sel in data.textures) {
     if (sel === 'document')
       continue;
@@ -98,6 +101,25 @@ async function addElements() {
     var path = tex.path;
     var aspect = tex.width / tex.height;
     var texture = new THREE.TextureLoader().load( '/'+path );
+
+    if (atlas) {
+      texture.repeat.x = tex.width / doc.width;
+      texture.repeat.y = tex.height / doc.height;
+      var offsetX = tex.x / doc.width;
+      var offsetY = ( ( doc.height - tex.height - tex.y ) / doc.height );
+      //console.log('offsetY: ' + offsetY.toFixed(5));
+
+      texture.offset.x = offsetX;
+      texture.offset.y = offsetY;
+
+      console.log(texture.repeat);
+      console.log(texture.offset);
+
+      _tex = texture;
+
+      tex.needsUpdate = true;
+    }
+
     var material = new THREE.MeshBasicMaterial( { map: texture } );
 
     var s = 1 / 512;
@@ -129,8 +151,8 @@ function animate() {
 }
 
 function update() {
-  if (cube)
-    cube.rotation.y += 0.003;
+  //if (cube)
+  //  cube.rotation.y += 0.003;
 }
 
 function render() {
