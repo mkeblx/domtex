@@ -204,8 +204,8 @@ var forceUpdate = false;
         } else {
           var viewportOffset = el.getBoundingClientRect();
           var obj = {};
-          obj.x = viewportOffset.left;
-          obj.y = viewportOffset.top;
+          obj.x = Math.round(viewportOffset.left);
+          obj.y = Math.round(viewportOffset.top);
           obj.width = el.offsetWidth;
           obj.height = el.offsetHeight;
           attrs[sel] = obj;

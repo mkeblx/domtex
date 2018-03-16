@@ -4,18 +4,70 @@
   <meta charset="utf-8">
   <title>test</title>
 <style>
-#box {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+#box1, #box2, #box3 {
+  margin-bottom: 5px;
+  padding: 4px;
+}
+
+#box1 {
   border: 2px solid black;
   background-color: #c39;
   width: 256px;
   height: 256px;
 }
+
+#box2 {
+  border: 3px dotted white;
+  background-color: green;
+  width: 128px;
+  height: 128px;
+}
+
+#box3 {
+  border: 3px double red;
+  background-color: white;
+  width: 256px;
+  height: 64px;
+}
+
+#grid {
+  width: 512px;
+  height: 502px;
+  outline: 1px dotted black;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 </style>
 </head>
 <body>
-  <h1>this is a test</h1>
+  <h1>test template</h1>
 
-  <div id="box">
+  <div id="box1">
+    #box1
   </div>
+
+  <div id="box2">
+    #box2
+  </div>
+
+  <div id="box3">
+    #box3
+  </div>
+
+  <div id="grid"></div>
 </body>
 </html>

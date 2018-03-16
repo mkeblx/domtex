@@ -26,17 +26,19 @@ var renderer;
 
 var container;
 
+
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var onClickPosition = new THREE.Vector2();
 
+var group;
 var cube;
 
 var _tex;
 
 var reqURL;
-var site = 'https://news.ycombinator.com';
-var sels = ['.pagetop','.hnname'];
+var site = 'http://localhost:8000/samples/test.html';
+var sels = ['#box1','#box2','#box3'];
 var atlas = true;
 var force = true;
 var params = {
@@ -69,11 +71,14 @@ function init() {
     console.log(position);
   });
 
-  camera.position.z = 1.1;
+  camera.position.z = 1.0;
 
   window.addEventListener( 'resize', onWindowResize, false );
 
 
+  group = new THREE.Object3D();
+  group.position.y = 0.3;
+  scene.add(group);
   addElements();
 }
 
@@ -92,6 +97,7 @@ async function addElements() {
 
   var i = 0;
   var doc = data.textures['document'];
+  var y = 0;
   for (let sel in data.textures) {
     if (sel === 'document')
       continue;
@@ -107,7 +113,6 @@ async function addElements() {
       texture.repeat.y = tex.height / doc.height;
       var offsetX = tex.x / doc.width;
       var offsetY = ( ( doc.height - tex.height - tex.y ) / doc.height );
-      //console.log('offsetY: ' + offsetY.toFixed(5));
 
       texture.offset.x = offsetX;
       texture.offset.y = offsetY;
@@ -123,10 +128,16 @@ async function addElements() {
     var material = new THREE.MeshBasicMaterial( { map: texture } );
 
     var s = 1 / 512;
-    var geometry = new THREE.BoxGeometry( tex.width * s, tex.height * s, tex.width * s );
+    var geometry = new THREE.BoxGeometry( tex.width * s, tex.height * s, tex.width * s * 0.05 );
     cube = new THREE.Mesh( geometry, material );
-    cube.position.y = i / 10;
-    scene.add( cube );
+
+    cube.position.y = y;
+
+    console.log(y);
+    y -= (tex.height * s);
+
+
+    group.add( cube );
 
     i++;
   }
