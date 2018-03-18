@@ -20,6 +20,8 @@ canvas { width: 100%; height: 100% }
 <script>
 'use strict';
 
+var clock = new THREE.Clock();
+
 var scene;
 var camera;
 var renderer;
@@ -33,6 +35,8 @@ var onClickPosition = new THREE.Vector2();
 
 var group;
 var cube;
+
+var loading;
 
 var _tex;
 
@@ -75,11 +79,20 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
+  addLoadingIndicator();
 
   group = new THREE.Object3D();
   group.position.y = 0.3;
   scene.add(group);
+
   addElements();
+}
+
+function addLoadingIndicator() {
+  loading = new THREE.Mesh(
+    new THREE.RingGeometry( 0.1, 0.13, 60, 1, 0, Math.PI * 2 / 3 ),
+     new THREE.MeshBasicMaterial( {  } ) );
+  scene.add(loading);
 }
 
 // return path
@@ -94,6 +107,8 @@ async function addElements() {
   console.log(reqURL);
   var data = await getData(reqURL);
   console.log(data);
+
+  scene.remove(loading);
 
   var i = 0;
   var doc = data.textures['document'];
@@ -111,14 +126,14 @@ async function addElements() {
     if (atlas) {
       texture.repeat.x = tex.width / doc.width;
       texture.repeat.y = tex.height / doc.height;
+
       var offsetX = tex.x / doc.width;
       var offsetY = ( ( doc.height - tex.height - tex.y ) / doc.height );
-
       texture.offset.x = offsetX;
       texture.offset.y = offsetY;
 
-      console.log(texture.repeat);
-      console.log(texture.offset);
+      //console.log(texture.repeat);
+      //console.log(texture.offset);
 
       _tex = texture;
 
@@ -154,19 +169,26 @@ function checkMap() {
 
 }
 
-function animate() {
+function animate(t) {
   window.requestAnimationFrame( animate );
 
-  update();
-  render();
+  var dt = clock.getDelta();
+
+  update(t, dt);
+  render(t, dt);
 }
 
-function update() {
+var r = 0;
+function update(t, dt) {
+  if (loading) {
+    r += dt;
+    loading.rotation.set( 0, 0, -r*4);
+  }
   //if (cube)
   //  cube.rotation.y += 0.003;
 }
 
-function render() {
+function render(t, dt) {
   renderer.render( scene, camera );
 }
 
