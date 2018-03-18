@@ -1,0 +1,18 @@
+{
+  "name": "domtex",
+  "description": "domtex extension",
+  "version": 0.1,
+  "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "desktopCapture",
+    "tabCapture"
+  ],
+  "content_scripts": [
+    {
+      "js": ["domtex-extension.js"],
+      "all_frames": true,
+      "run_at": "document_end"
+    }
+  ],
+}
