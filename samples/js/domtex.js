@@ -44,7 +44,7 @@ if (window.THREE) {
 
       _tex = texture;
     } else {
-      // transform UVs
+      // generate UVs
     }
 
     return texture;
@@ -52,11 +52,17 @@ if (window.THREE) {
 
   // transform UVs based on repeat & offset
   DOMTEX.transformUVs = function(geo, texture) {
-    var uvs = geo.faceVertexUvs;
-    for (var i = 0, n = uvs.length; i < n; i++) {
-      console.log(uvs[i]);
-      //texture.transformUv(uvs[i]);
+    let faces = geo.faceVertexUvs[0];
+    for (let i = 0, n = faces.length; i < n; i++) {
+      let faceUvs = faces[i];
+      for (let k = 0; k < faceUvs.length; k++) {
+        let faceUv = faceUvs[k];
+        texture.transformUv(faceUv);
+        console.log(faceUv);
+      }
     }
+
+    //geo.uvsNeedUpdate = true;
   };
 
   // Return a textured Box sized to
@@ -72,8 +78,7 @@ if (window.THREE) {
       tex.width * s, tex.height * s, tex.width * s * 0.05 );
 
     var texture = DOMTEX.createTexture(sel, data);
-
-    DOMTEX.transformUVs(geometry, texture);
+    //DOMTEX.transformUVs(geometry, texture);
 
     var material = new THREE.MeshBasicMaterial( { map: texture } );
     var object = new THREE.Mesh( geometry, material );
