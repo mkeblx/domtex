@@ -51,10 +51,11 @@ if (window.THREE) {
   };
 
   // transform UVs based on repeat & offset
-  DOMTEX.mapUVs = function(geo, texture) {
+  DOMTEX.transformUVs = function(geo, texture) {
     var uvs = geo.faceVertexUvs;
     for (var i = 0, n = uvs.length; i < n; i++) {
-      texture.transformUv(uvs[i]);
+      console.log(uvs[i]);
+      //texture.transformUv(uvs[i]);
     }
   };
 
@@ -67,9 +68,12 @@ if (window.THREE) {
     console.log(tex);
     var aspect = tex.width / tex.height;
 
-    var geometry = new THREE.BoxGeometry( tex.width * s, tex.height * s, tex.width * s * 0.05 );
+    var geometry = new THREE.BoxGeometry(
+      tex.width * s, tex.height * s, tex.width * s * 0.05 );
 
     var texture = DOMTEX.createTexture(sel, data);
+
+    DOMTEX.transformUVs(geometry, texture);
 
     var material = new THREE.MeshBasicMaterial( { map: texture } );
     var object = new THREE.Mesh( geometry, material );
