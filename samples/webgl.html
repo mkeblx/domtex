@@ -78,6 +78,8 @@ function init() {
 
   window.addEventListener( 'resize', onWindowResize, false );
 
+  container.addEventListener( 'mousedown', onMouseAction, false );
+
   addLoadingIndicator();
 
   group = new THREE.Object3D();
@@ -118,6 +120,7 @@ async function addElements() {
     var object = DOMTEX.createObject3D(sel, data);
 
     object.position.y = y;
+    object.position.z = 0.01 * i;
 
     console.log(y);
     //y -= (tex.height * s);
@@ -137,6 +140,27 @@ function convertUVToPosition(uv, width, height) {
   var x = Math.round(uv.x * width);
   var y = Math.round(uv.y * height);
   return [x,y];
+}
+
+function onMouseAction( evt ) {
+    console.log(evt);
+
+  evt.preventDefault();
+  var array = getMousePosition( container, evt.clientX, evt.clientY );
+  onClickPosition.fromArray( array );
+  var intersects = getIntersects( onClickPosition, scene.children );
+  console.log(intersects);
+  if ( intersects.length > 0 && intersects[ 0 ].uv ) {
+    var intersect = intersects[ 0 ];
+    var uv = intersect.uv;
+    intersect.object.material.map.transformUv( uv );
+    var uvs = { x: uv.x.toFixed(4), y: uv.y.toFixed(4) };
+    console.log( uvs );
+
+    console.log( intersect.object.name );
+
+    scene.dispatchEvent({type: 'click', message: 'clicked', uvs: uvs });
+  }
 }
 
 // check
@@ -175,7 +199,7 @@ var getMousePosition = function ( dom, x, y ) {
 var getIntersects = function ( point, objects ) {
   mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
   raycaster.setFromCamera( mouse, camera );
-  return raycaster.intersectObjects( objects );
+  return raycaster.intersectObjects( objects, true );
 };
 
 function onWindowResize() {
