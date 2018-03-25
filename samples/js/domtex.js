@@ -74,8 +74,8 @@ if (window.THREE) {
     console.log(tex);
     var aspect = tex.width / tex.height;
 
-    var geometry = new THREE.BoxGeometry(
-      tex.width * s, tex.height * s, tex.width * s * 0.05 );
+    var geometry = new THREE.PlaneGeometry(
+      tex.width * s, tex.height * s );
 
     var texture = DOMTEX.createTexture(sel, data);
     //DOMTEX.transformUVs(geometry, texture);
