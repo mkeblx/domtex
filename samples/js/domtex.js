@@ -3,22 +3,22 @@
 
 var DOMTEX = {};
 
-function generateRequestUrl(params) {
+DOMTEX.generateRequestUrl = function(params) {
 	var PORT = '8080';
 	var domain = 'http://localhost:'+PORT;
 
-	var reqURL = domain+'/generate?' + serialize(params);
+	var reqURL = domain+'/generate?' + DOMTEX.serialize(params);
 	return reqURL;
-}
+};
 
-var serialize = function(obj) {
+DOMTEX.serialize = function(obj) {
   var str = [];
   for(var p in obj)
     if (obj.hasOwnProperty(p)) {
       str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
     }
   return str.join('&');
-}
+};
 
 //
 if (window.THREE) {
