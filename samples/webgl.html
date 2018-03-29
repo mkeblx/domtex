@@ -87,12 +87,17 @@ function init() {
   scene.add(group);
 
   addElements();
+
+  setTimeout(function(){
+    console.log(renderer.info.programs);
+    console.log(renderer.info.memory)
+  }, 5000);
 }
 
 function addLoadingIndicator() {
   loading = new THREE.Mesh(
     new THREE.RingGeometry( 0.1, 0.13, 60, 1, 0, Math.PI * 2 / 3 ),
-     new THREE.MeshBasicMaterial( {  } ) );
+     new THREE.MeshBasicMaterial( { color: 0xdddddd } ) );
   scene.add(loading);
 }
 
@@ -110,6 +115,7 @@ async function addElements() {
   console.log(data);
 
   scene.remove(loading);
+  loading = null;
 
   var i = 0;
   var y = 0;
