@@ -29,7 +29,9 @@ var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
 var onClickPosition = new THREE.Vector2();
 
+var textureSize;
 var cube;
+var highlightEl;
 
 var site = 'http://news.ycombinator.com';
 var reqURL = '/samples/data/hn-imagemap.json';
@@ -61,11 +63,13 @@ function init() {
     console.log(position);
 
     let link = getLinkAt(links, position);
-    if (link)
+    if (link) {
       console.log('clicked: ' + link.href);
+      updateLinkHighlight(link);
+    }
   });
 
-  camera.position.z = 1.5;
+  camera.position.z = 1.1;
 
   window.addEventListener( 'resize', onWindowResize, false );
   container.addEventListener( 'mousedown', onMouseAction, false );
@@ -84,12 +88,47 @@ async function addTexturedCube() {
   console.log(path);
   links = data.links;
 
+  textureSize = data.width;
+
   var texture = new THREE.TextureLoader().load( '/'+path );
   var material = new THREE.MeshBasicMaterial( { map: texture } );
 
-  var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+  var geometry = new THREE.PlaneGeometry( 1, 1 );
   cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
+
+  addLinkHighlight();
+}
+
+function addLinkHighlight() {
+  var hMat = new THREE.MeshBasicMaterial( { transparent: true, color: 0x3366ee, opacity: 0.3 } );
+  var hGeo = new THREE.PlaneGeometry( 1, 1 );
+  highlightEl = new THREE.Mesh( hGeo, hMat );
+  highlightEl.position.z = 0.005;
+  highlightEl.visible = false;
+
+  var highlightContainer = new THREE.Object3D();
+  var s = 1 / textureSize;
+  highlightContainer.scale.set( s,-s,s );
+  highlightContainer.position.x = -0.5;
+  highlightContainer.position.y = 0.5;
+  highlightContainer.add( highlightEl );
+
+  scene.add( highlightContainer );
+}
+
+function updateLinkHighlight(link) {
+  console.log(link);
+  highlightEl.visible = true;
+
+  var scaleX = link.width;
+  var scaleY = link.height;
+
+  highlightEl.scale.x = scaleX;
+  highlightEl.scale.y = scaleY;
+
+  highlightEl.position.x = link.x + scaleX/2;
+  highlightEl.position.y = link.y + scaleY/2;
 }
 
 function getLinkAt(links, position) {
@@ -131,8 +170,8 @@ function animate() {
 }
 
 function update() {
-  if (cube)
-    cube.rotation.y += 0.003;
+  //if (cube)
+  //  cube.rotation.y += 0.003;
 }
 
 function render() {
@@ -143,7 +182,7 @@ function onMouseAction( evt ) {
   evt.preventDefault();
   var array = getMousePosition( container, evt.clientX, evt.clientY );
   onClickPosition.fromArray( array );
-  var intersects = getIntersects( onClickPosition, scene.children );
+  var intersects = getIntersects( onClickPosition, [cube] );
   if ( intersects.length > 0 && intersects[ 0 ].uv ) {
     var uv = intersects[ 0 ].uv;
     intersects[ 0 ].object.material.map.transformUv( uv );
