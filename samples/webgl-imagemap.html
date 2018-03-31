@@ -65,6 +65,17 @@ function init() {
     let link = getLinkAt(links, position);
     if (link) {
       console.log('clicked: ' + link.href);
+      updateLinkHighlight(link, true);
+    }
+  });
+
+  scene.addEventListener('hover', function(event){
+    var position = convertUVToPosition(event.uvs, width, height);
+    console.log(position);
+
+    let link = getLinkAt(links, position);
+    if (link) {
+      console.log('hovered: ' + link.href);
       updateLinkHighlight(link);
     }
   });
@@ -72,7 +83,8 @@ function init() {
   camera.position.z = 1.1;
 
   window.addEventListener( 'resize', onWindowResize, false );
-  container.addEventListener( 'mousedown', onMouseAction, false );
+  container.addEventListener( 'mousedown', onMouseClick, false );
+  container.addEventListener( 'mousemove', onMouseMove, false );
 }
 
 // return path
@@ -178,8 +190,35 @@ function render() {
   renderer.render( scene, camera );
 }
 
-function onMouseAction( evt ) {
+function onMouseMove( evt ) {
   evt.preventDefault();
+
+  var data = onMouseAction( evt );
+  if (data) {
+    scene.dispatchEvent({
+      type: 'hover',
+      message: 'hovered',
+      uvs: data.uvs
+    });
+  }
+}
+
+function onMouseClick( evt ) {
+  evt.preventDefault();
+
+  var data = onMouseAction( evt );
+  if (data) {
+    scene.dispatchEvent({
+      type: 'click',
+      message: 'hover',
+      uvs: data.uvs
+    });
+  }
+}
+
+function onMouseAction( evt ) {
+  var data = null;
+
   var array = getMousePosition( container, evt.clientX, evt.clientY );
   onClickPosition.fromArray( array );
   var intersects = getIntersects( onClickPosition, [cube] );
@@ -189,8 +228,10 @@ function onMouseAction( evt ) {
     var uvs = { x: uv.x.toFixed(4), y: uv.y.toFixed(4) };
     console.log( uvs );
 
-    scene.dispatchEvent({type: 'click', message: 'clicked', uvs: uvs });
+    data = { uvs: uvs };
   }
+
+  return data;
 }
 
 var getMousePosition = function ( dom, x, y ) {
