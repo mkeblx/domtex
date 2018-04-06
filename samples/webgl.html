@@ -136,6 +136,28 @@ async function addElements() {
 
     i++;
   }
+
+  addElementEvents();
+}
+
+// only handles ID as name
+// TODO: make recursive
+var $ = function(selector) {
+  //if (selector.charAt(0) === '#')
+    //selector = selector.slice(1);
+  return scene.children[0].getObjectByName(selector);
+};
+
+function addElementEvents() {
+  $('#box1').addEventListener('click', function(ev){
+    alert('#box1 clicked');
+  });
+  $('#box2').addEventListener('click', function(ev){
+    alert('#box2 clicked');
+  });
+  $('#box3').addEventListener('click', function(ev){
+    alert('#box3 clicked');
+  });
 }
 
 function createElement() {
@@ -164,8 +186,9 @@ function onMouseAction( evt ) {
     console.log( uvs );
 
     console.log( intersect.object.name );
+    intersect.object.dispatchEvent({ type: 'click', message: '' });
 
-    scene.dispatchEvent({type: 'click', message: 'clicked', uvs: uvs });
+    scene.dispatchEvent({ type: 'click', message: 'clicked', uvs: uvs });
   }
 }
 
