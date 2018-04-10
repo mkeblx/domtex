@@ -32,6 +32,9 @@ var mouse = new THREE.Vector2();
 var onClickPosition = new THREE.Vector2();
 
 var textureSize;
+var textureWidth;
+var textureHeight;
+
 var cube;
 
 var elementContainer;
@@ -45,10 +48,6 @@ var currentIndex = null;
 var site = 'http://news.ycombinator.com';
 var reqURL = '/samples/data/hn-imagemap.json';
 var links = [];
-
-var width = 512;
-var height = 512;
-
 
 init();
 animate();
@@ -68,7 +67,7 @@ function init() {
   addTexturedCube();
 
   scene.addEventListener('click', function(event){
-    var position = convertUVToPosition(event.uvs, width, height);
+    var position = convertUVToPosition(event.uvs, textureWidth, textureHeight);
     console.log(position);
 
     let link = getLinkAt(links, position);
@@ -79,7 +78,7 @@ function init() {
   });
 
   scene.addEventListener('hover', function(event){
-    var position = convertUVToPosition(event.uvs, width, height);
+    var position = convertUVToPosition(event.uvs, textureWidth, textureHeight);
     console.log(position);
 
     let link = getLinkAt(links, position);
@@ -122,6 +121,8 @@ async function addTexturedCube() {
   links = data.links;
 
   textureSize = data.width;
+  textureWidth = data.width;
+  textureHeight = data.height;
 
   var texture = new THREE.TextureLoader().load( '/'+path );
   var material = new THREE.MeshBasicMaterial( { map: texture } );
@@ -178,6 +179,10 @@ function updateLinkHover(link) {
 
   var scaleX = link.width;
   var scaleY = link.height;
+  if ((link.x + link.width) > textureWidth)
+    scaleX = textureWidth - link.x;
+  if ((link.y + link.height) > textureHeight)
+    scaleY = textureHeight - link.y;
 
   hoverEl.scale.x = scaleX;
   hoverEl.scale.y = scaleY;
@@ -191,6 +196,10 @@ function updateFocusElement(link) {
 
   var scaleX = link.width;
   var scaleY = link.height;
+  if ((link.x + link.width) > textureWidth)
+    scaleX = textureWidth - link.x;
+  if ((link.y + link.height) > textureHeight)
+    scaleY = textureHeight - link.y;
 
   focusEl.scale.x = scaleX;
   focusEl.scale.y = scaleY;
