@@ -15,6 +15,7 @@ canvas { width: 100%; height: 100% }
 </head>
 <body>
   <div id="container"></div>
+
 <script src="js/three.min.js"></script>
 <script>
 'use strict';
@@ -24,6 +25,7 @@ var camera;
 var renderer;
 
 var container;
+var body = document.querySelector('body');
 
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
@@ -31,9 +33,14 @@ var onClickPosition = new THREE.Vector2();
 
 var textureSize;
 var cube;
-var highlightEl;
 
+var elementContainer;
+
+var hoverEl;
 var currentLink = null;
+
+var focusEl;
+var currentIndex = null;
 
 var site = 'http://news.ycombinator.com';
 var reqURL = '/samples/data/hn-imagemap.json';
@@ -67,7 +74,7 @@ function init() {
     let link = getLinkAt(links, position);
     if (link) {
       console.log('clicked: ' + link.href);
-      updateLinkHighlight(link, true);
+      updateLinkHover(link, true);
     }
   });
 
@@ -85,9 +92,9 @@ function init() {
       currentLink = link.href;
 
       console.log('hovered: ' + link.href);
-      updateLinkHighlight(link);
+      updateLinkHover(link);
     } else {
-      updateLinkHighlight(null);
+      updateLinkHover(null);
       currentLink = null;
     }
   });
@@ -97,6 +104,8 @@ function init() {
   window.addEventListener( 'resize', onWindowResize, false );
   container.addEventListener( 'mousedown', onMouseClick, false );
   container.addEventListener( 'mousemove', onMouseMove, false );
+
+  body.addEventListener( 'keydown', onKey, false );
 }
 
 // return path
@@ -121,28 +130,47 @@ async function addTexturedCube() {
   cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
 
-  addLinkHighlight();
+  addElementContainer();
+  addHoverElement();
+  addFocusElement();
 }
 
-function addLinkHighlight() {
-  var hMat = new THREE.MeshBasicMaterial( { transparent: true, color: 0x3366ee, opacity: 0.3 } );
-  var hGeo = new THREE.PlaneGeometry( 1, 1 );
-  highlightEl = new THREE.Mesh( hGeo, hMat );
-  highlightEl.position.z = 0.005;
-  highlightEl.visible = false;
-
-  var highlightContainer = new THREE.Object3D();
+function addElementContainer() {
+  elementContainer = new THREE.Object3D();
   var s = 1 / textureSize;
-  highlightContainer.scale.set( s,-s,s );
-  highlightContainer.position.x = -0.5;
-  highlightContainer.position.y = 0.5;
-  highlightContainer.add( highlightEl );
+  elementContainer.scale.set( s,-s,s );
+  elementContainer.position.x = -0.5;
+  elementContainer.position.y = 0.5;
 
-  scene.add( highlightContainer );
+  scene.add( elementContainer );
 }
 
-function updateLinkHighlight(link) {
-  highlightEl.visible = (link === null) ? false : true;
+function addHoverElement() {
+  var hMat = new THREE.MeshBasicMaterial( {
+    transparent: true, color: 0x3366ee, opacity: 0.3
+  } );
+  var hGeo = new THREE.PlaneGeometry( 1, 1 );
+  hoverEl = new THREE.Mesh( hGeo, hMat );
+  hoverEl.position.z = 0.005;
+  hoverEl.visible = false;
+
+  elementContainer.add( hoverEl );
+}
+
+function addFocusElement() {
+  var fGeo = new THREE.PlaneGeometry( 1, 1 );
+  var fMat = new THREE.MeshBasicMaterial( {
+    transparent: true, color: 0xee0000, opacity: 0.3
+  } );
+  focusEl = new THREE.Mesh( fGeo, fMat );
+  focusEl.position.z = 0.005;
+  focusEl.visible = false;
+
+  elementContainer.add( focusEl );
+}
+
+function updateLinkHover(link) {
+  hoverEl.visible = (link === null) ? false : true;
 
   if (link === null) {
     return;
@@ -151,11 +179,24 @@ function updateLinkHighlight(link) {
   var scaleX = link.width;
   var scaleY = link.height;
 
-  highlightEl.scale.x = scaleX;
-  highlightEl.scale.y = scaleY;
+  hoverEl.scale.x = scaleX;
+  hoverEl.scale.y = scaleY;
 
-  highlightEl.position.x = link.x + scaleX/2;
-  highlightEl.position.y = link.y + scaleY/2;
+  hoverEl.position.x = link.x + scaleX/2;
+  hoverEl.position.y = link.y + scaleY/2;
+}
+
+function updateFocusElement(link) {
+  focusEl.visible = true;
+
+  var scaleX = link.width;
+  var scaleY = link.height;
+
+  focusEl.scale.x = scaleX;
+  focusEl.scale.y = scaleY;
+
+  focusEl.position.x = link.x + scaleX/2;
+  focusEl.position.y = link.y + scaleY/2;
 }
 
 function getLinkAt(links, position) {
@@ -259,6 +300,42 @@ var getIntersects = function ( point, objects ) {
   raycaster.setFromCamera( mouse, camera );
   return raycaster.intersectObjects( objects );
 };
+
+function onKey( evt ) {
+  console.log(evt);
+
+  const TAB = 9;
+
+  if (evt.keyCode === TAB) {
+    console.log('tab');
+
+    // TODO: tab through links
+    var shift = evt.shiftKey;
+    var dir = 1;
+    if (shift) {
+      dir = -1;
+    }
+    focusNextLink(dir);
+
+    evt.preventDefault();
+    return false;
+  }
+}
+
+function focusNextLink(dir = 1) {
+  if (currentIndex === null) {
+    currentIndex = 0;
+  } else if (currentIndex >= links.length-1) {
+    currentIndex = 0;
+  } else {
+    currentIndex = currentIndex + 1*dir;
+  }
+
+  console.log(currentIndex);
+
+  let link = links[currentIndex];
+  updateFocusElement(link);
+}
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
