@@ -110,7 +110,6 @@ if (window.THREE) {
     var doc = data.textures['document'];
 
     var tex = data.textures[sel];
-    console.log(tex);
     var aspect = tex.width / tex.height;
 
     var geometry = new THREE.PlaneGeometry(

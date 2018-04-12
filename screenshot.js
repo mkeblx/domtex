@@ -208,6 +208,12 @@ var forceUpdate = false;
           obj.y = Math.round(viewportOffset.top);
           obj.width = el.offsetWidth;
           obj.height = el.offsetHeight;
+
+          obj.data = {};
+          for (prop in el.dataset) {
+            obj.data[prop] = el.dataset[prop];
+          }
+
           attrs[sel] = obj;
         }
       }
@@ -234,6 +240,7 @@ var forceUpdate = false;
         texture.y = _attrs.y;
         texture.width = _attrs.width;
         texture.height = _attrs.height;
+        texture.data = _attrs.data;
       } else {
         hashParams = {
           url: url,
