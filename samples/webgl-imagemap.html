@@ -177,35 +177,28 @@ function updateLinkHover(link) {
     return;
   }
 
-  var scaleX = link.width;
-  var scaleY = link.height;
-  if ((link.x + link.width) > textureWidth)
-    scaleX = textureWidth - link.x;
-  if ((link.y + link.height) > textureHeight)
-    scaleY = textureHeight - link.y;
-
-  hoverEl.scale.x = scaleX;
-  hoverEl.scale.y = scaleY;
-
-  hoverEl.position.x = link.x + scaleX/2;
-  hoverEl.position.y = link.y + scaleY/2;
+  updateElement(hoverEl, link);
 }
 
 function updateFocusElement(link) {
   focusEl.visible = true;
 
-  var scaleX = link.width;
-  var scaleY = link.height;
-  if ((link.x + link.width) > textureWidth)
-    scaleX = textureWidth - link.x;
-  if ((link.y + link.height) > textureHeight)
-    scaleY = textureHeight - link.y;
+  updateElement(focusEl, link);
+}
 
-  focusEl.scale.x = scaleX;
-  focusEl.scale.y = scaleY;
+function updateElement(el, to) {
+  var scaleX = to.width;
+  var scaleY = to.height;
+  if ((to.x + to.width) > textureWidth)
+    scaleX = textureWidth - to.x;
+  if ((to.y + to.height) > textureHeight)
+    scaleY = textureHeight - to.y;
 
-  focusEl.position.x = link.x + scaleX/2;
-  focusEl.position.y = link.y + scaleY/2;
+  el.scale.x = scaleX;
+  el.scale.y = scaleY;
+
+  el.position.x = to.x + scaleX/2;
+  el.position.y = to.y + scaleY/2;
 }
 
 function getLinkAt(links, position) {
