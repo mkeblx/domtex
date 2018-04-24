@@ -2,6 +2,9 @@ const puppeteer = require('puppeteer');
 const { URL } = require('url');
 const fs = require('fs');
 const sizeOf = require('image-size');
+const _util = require('util')
+const fs_writeFile = _util.promisify(fs.writeFile);
+const { createCanvas, loadImage, Image } = require('canvas');
 
 const util = require('./util.js');
 
@@ -21,6 +24,8 @@ var forceUpdate = false;
   var url = DEFAULT_URL;
   var width = DEFAULT_WIDTH;
   var height = DEFAULT_HEIGHT;
+
+  var scaleFactor = 1;
 
   var atlas = false;
   if (argv.atlas) {
@@ -149,7 +154,8 @@ var forceUpdate = false;
 
   page.setViewport({
     width: width,
-    height: height
+    height: height,
+    deviceScaleFactor: scaleFactor
   });
 
   await page.goto(url, { waitUntil: 'networkidle2' });
@@ -159,6 +165,7 @@ var forceUpdate = false;
 
 
   var includePage = true;
+  // 'document' texture entry
   if (selectors.length == 0 || includePage || atlas) {
     hashParams = {
       url: url,
@@ -172,11 +179,19 @@ var forceUpdate = false;
     var fileName = util.hash(hashParams)+'.png';
     var path = 'output/'+fileName;
 
-    options.path = path;
-
-
     if (!fs.existsSync(path) || forceUpdate) {
-      await page.screenshot(options);
+      if (scaleFactor > 1) {
+        let buffer = await page.screenshot(options);
+        options.path = path;
+        buffer = resizeBuffer(
+          buffer,
+          width*scaleFactor, height*scaleFactor,
+          scaleFactor);
+        await fs_writeFile(path, buffer, 'binary');
+      } else {
+        options.path = path;
+        await page.screenshot(options);
+      }
     }
 
     var texture = {};
@@ -190,6 +205,7 @@ var forceUpdate = false;
 
     textures['document'] = texture;
   }
+
   if (selectors.length > 0) {
     log('selectors: ' + selectors);
 
@@ -281,6 +297,34 @@ var forceUpdate = false;
 })().catch(err => {
   console.log('catch: ' + err);
 });
+
+function resizeBuffer(buffer, width, height, scaleFactor) {
+  let dstW = width  / scaleFactor;
+  let dstH = height / scaleFactor;
+  const canvas = createCanvas(dstW, dstH);
+  const ctx = canvas.getContext('2d');
+
+  var img = new Image;
+  img.src = buffer;
+  ctx.drawImage(img, 0, 0, dstW, dstH);
+  var buf = canvas.toBuffer();
+  return buf;
+}
+
+async function resizeFile(filename, scaleFactor, newFilename) {
+  let dims = sizeOf(filename);
+  var dstWidth = dims.width / scaleFactor;
+  var dstHeight = dims.height / scaleFactor;
+  const canvas = createCanvas(dstWidth, dstHeight);
+  const ctx = canvas.getContext('2d');
+
+  let img = await loadImage(filename);
+  ctx.drawImage(img, 0, 0, dstWidth, dstHeight);
+  var buffer = canvas.toBuffer();
+
+  var dstFile = (newFilename) ? newFilename : filename;
+  await fs_writeFile(dstFile, buffer, 'binary');
+}
 
 function log(msg, force) {
   if (verbose || force)
