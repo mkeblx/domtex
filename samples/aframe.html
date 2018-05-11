@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+  <title>A-Frame Example</title>
+  <script src="js/aframe.min.js"></script>
+  <script src="js/domtex.js"></script>
+</head>
+<body>
+
+<a-scene>
+  <a-assets>
+    <domtex
+      sels="#box1,#box2,#box3"
+      url="http://localhost:8000/samples/test.html"></domtex>
+  </a-assets>
+
+  <a-entity position="0 0 -1">
+    <a-entity domtex="sel: #box1" position="0 0.4 0"></a-entity>
+    <a-entity domtex="sel: #box2" position="0 0.0 0"></a-entity>
+    <a-entity domtex="sel: #box3" position="0 -0.2 0"></a-entity>
+  </a-entity>
+
+  <a-sky color="#6EBAA7"></a-sky>
+
+  <a-camera></a-camera>
+</a-scene>
+
+</body>
+</html>

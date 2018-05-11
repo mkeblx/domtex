@@ -101,17 +101,10 @@ function addLoadingIndicator() {
   scene.add(loading);
 }
 
-// return path
-async function getData(request) {
-  let resp = await fetch(request);
-  let data = await resp.json();
-  return data;
-}
-
 async function addElements() {
   var reqURL = DOMTEX.generateRequestUrl(params);
   console.log(reqURL);
-  var data = await getData(reqURL);
+  var data = await DOMTEX.getData(reqURL);
   console.log(data);
 
   scene.remove(loading);

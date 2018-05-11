@@ -4,7 +4,8 @@
 var DOMTEX = {};
 
 DOMTEX.cache = {
-  textures: {}
+  responses: {},
+  textures: {} // THREE
 };
 
 DOMTEX.modifyUVs = true;
@@ -13,11 +14,11 @@ DOMTEX.generateRequestUrl = function(params) {
 	var PORT = '8080';
 	var domain = 'http://localhost:'+PORT;
 
-	var reqURL = domain+'/generate?' + DOMTEX.serialize(params);
+	var reqURL = domain+'/generate?' + DOMTEX._serialize(params);
 	return reqURL;
 };
 
-DOMTEX.serialize = function(obj) {
+DOMTEX._serialize = function(obj) {
   var str = [];
   for(var p in obj)
     if (obj.hasOwnProperty(p)) {
@@ -26,9 +27,23 @@ DOMTEX.serialize = function(obj) {
   return str.join('&');
 };
 
-//
-if (window.THREE) {
+DOMTEX._checkStatus = function(response) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  } else {
+    var error = new Error(response.statusText);
+    error.response = response;
+    throw error;
+  }
+};
 
+DOMTEX.getData = async function(request) {
+  let resp = await fetch(request);
+  let data = await resp.json();
+  return data;
+};
+
+if (window.THREE) {
   // TODO: also implement UV modification function
   DOMTEX.createTexture = function(sel, data) {
     var doc = data.textures['document'];
@@ -104,8 +119,6 @@ if (window.THREE) {
     //geo.uvsNeedUpdate = true;
   };
 
-  // Return a textured Box sized to
-  // TODO: return a Plane
   DOMTEX.createObject3D = function(sel, data, s = 1/512) {
     var doc = data.textures['document'];
 
@@ -128,4 +141,72 @@ if (window.THREE) {
 
     return object;
   };
+}
+
+if (window.AFRAME) {
+  AFRAME.registerComponent('domtex', {
+
+    schema: {
+      sel: {
+        type: 'string'
+      },
+      template: {
+        type: 'string'
+      }
+    },
+
+    // for individual elements create geometry if needed
+    // or use existing
+    // set material texture
+    // make aspect ratio correct
+    init: async function() {
+      //var url = this.data.url;
+      var sel = this.data.sel;
+
+      console.log('sel: ' + sel);
+
+      var domtexAsset = document.getElementsByTagName('domtex')[0];
+
+      var sels = domtexAsset.attributes.sels.value;
+      var url = domtexAsset.attributes.url.value;
+
+      // do requests
+      var params = {
+        url: url,
+        sel: sel,
+        atlas: true,
+        force: true
+      };
+      var reqURL = DOMTEX.generateRequestUrl(params);
+
+      console.log('reqURL: ' + reqURL);
+
+      var data;
+      if (url in DOMTEX.cache.responses) {
+        data = DOMTEX.cache.responses[url];
+      } else {
+        data = await DOMTEX.getData(reqURL);
+        DOMTEX.cache.responses[url] = data;
+      }
+
+      var tex = data.textures[sel];
+      var width = tex.width;
+      var height = tex.height;
+      var aspect = width / height;
+      var path = '/'+tex.path;
+
+      var object = DOMTEX.createObject3D(sel, data);
+      this.mesh = object;
+      this.el.setObject3D('mesh', this.mesh);
+    },
+
+    update: function(oldData) {
+      if (Object.keys(oldData).length === 0) { return; }
+    },
+
+    remove: function() {
+      this.el.removeObject3D('mesh');
+    }
+
+  });
 }
