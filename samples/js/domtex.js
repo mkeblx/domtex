@@ -37,11 +37,21 @@ DOMTEX._checkStatus = function(response) {
   }
 };
 
-DOMTEX.getData = async function(request) {
+DOMTEX.memoize = function(method, cache) {
+  return async function() {
+      let args = JSON.stringify(arguments);
+      cache[args] = cache[args] || method.apply(this, arguments);
+      return cache[args];
+  };
+};
+
+DOMTEX._getData = async function(request) {
   let resp = await fetch(request);
   let data = await resp.json();
   return data;
 };
+
+DOMTEX.getData = DOMTEX.memoize(DOMTEX._getData, DOMTEX.cache.responses);
 
 if (window.THREE) {
   // TODO: also implement UV modification function
@@ -163,8 +173,6 @@ if (window.AFRAME) {
       //var url = this.data.url;
       var sel = this.data.sel;
 
-      console.log('sel: ' + sel);
-
       var domtexAsset = document.getElementsByTagName('domtex')[0];
 
       var sels = domtexAsset.attributes.sels.value;
@@ -173,21 +181,13 @@ if (window.AFRAME) {
       // do requests
       var params = {
         url: url,
-        sel: sel,
+        sel: sels,
         atlas: true,
         force: true
       };
       var reqURL = DOMTEX.generateRequestUrl(params);
 
-      console.log('reqURL: ' + reqURL);
-
-      var data;
-      if (url in DOMTEX.cache.responses) {
-        data = DOMTEX.cache.responses[url];
-      } else {
-        data = await DOMTEX.getData(reqURL);
-        DOMTEX.cache.responses[url] = data;
-      }
+      var data = await DOMTEX.getData(reqURL);
 
       var tex = data.textures[sel];
       var width = tex.width;
