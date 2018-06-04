@@ -210,27 +210,31 @@ var forceUpdate = false;
     log('selectors: ' + selectors);
 
     attrs = await page.evaluate((selectors) => {
-      var attrs = {};
+      let attrs = {};
 
-      for (var i = 0; i < selectors.length; i++) {
-        var sel = selectors[i];
-        var el = document.querySelector(sel);
-        if (el === null) {
+      for (let i = 0; i < selectors.length; i++) {
+        let sel = selectors[i];
+        let els = document.querySelectorAll(sel);
+        if (els.length === 0) {
           attrs[sel] = null;
         } else {
-          var viewportOffset = el.getBoundingClientRect();
-          var obj = {};
-          obj.x = Math.round(viewportOffset.left);
-          obj.y = Math.round(viewportOffset.top);
-          obj.width = el.offsetWidth;
-          obj.height = el.offsetHeight;
+          for (let k = 0; k < els.length; k++) {
+            let el = els[k];
+            let elId = el.getAttribute('id'); // TODO: what if no id?
+            let viewportOffset = el.getBoundingClientRect();
+            let obj = {};
+            obj.x = Math.round(viewportOffset.left);
+            obj.y = Math.round(viewportOffset.top);
+            obj.width = el.offsetWidth;
+            obj.height = el.offsetHeight;
 
-          obj.data = {};
-          for (prop in el.dataset) {
-            obj.data[prop] = el.dataset[prop];
+            obj.data = {};
+            for (prop in el.dataset) {
+              obj.data[prop] = el.dataset[prop];
+            }
+
+            attrs['#'+elId] = obj;
           }
-
-          attrs[sel] = obj;
         }
       }
 
