@@ -219,8 +219,9 @@ var forceUpdate = false;
           attrs[sel] = null;
         } else {
           for (let k = 0; k < els.length; k++) {
+            if (attrs[sel]) // 1st
+              continue;
             let el = els[k];
-            let elId = el.getAttribute('id'); // TODO: what if no id?
             let viewportOffset = el.getBoundingClientRect();
             let obj = {};
             obj.x = Math.round(viewportOffset.left);
@@ -233,7 +234,12 @@ var forceUpdate = false;
               obj.data[prop] = el.dataset[prop];
             }
 
-            attrs['#'+elId] = obj;
+            if (sel == '[id]') {
+              let elId = el.getAttribute('id');
+              attrs['#'+elId] = obj;
+            } else {
+              attrs[sel] = obj;
+            }
           }
         }
       }
