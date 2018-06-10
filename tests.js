@@ -3,7 +3,7 @@ const { execFile } = require('child_process');
 console.log('Running tests...');
 
 var tests = [
-  ['screenshot.js','--url=https://nytimes.com']
+  ['generate.js','--url=https://nytimes.com']
 ];
 
 execFile('node', tests[0], (error, stdout, stderr) => {

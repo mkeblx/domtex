@@ -58,7 +58,7 @@ server.on('request', (request, response) => {
 
   function createResponse(json) {
 
-    var args = ['screenshot.js'];
+    var args = ['generate.js'];
     args.push('--url='+siteUrl);
     if (sel)
       args.push('--sel='+sel);
@@ -74,7 +74,7 @@ server.on('request', (request, response) => {
       if (error) {
         throw error;
       }
-      console.log('screenshot.js output:');
+      console.log('generate.js output:');
       console.log(stdout);
 
       response.statusCode = 200;
