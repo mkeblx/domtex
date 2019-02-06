@@ -1,3 +1,5 @@
+'use strict';
+
 // cache utils
 const fs = require('fs');
 const path = require('path');

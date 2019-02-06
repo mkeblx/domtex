@@ -1,3 +1,5 @@
+'use strict';
+
 // serve files out of samples
 const path = require('path');
 var express = require('express');

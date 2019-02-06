@@ -1,3 +1,5 @@
+'use strict';
+
 // create image map of all links on page
 const puppeteer = require('puppeteer');
 const { URL } = require('url');

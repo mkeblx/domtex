@@ -1,3 +1,5 @@
+'use strict';
+
 const { execFile } = require('child_process');
 
 console.log('Running tests...');

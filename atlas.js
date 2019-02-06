@@ -1,3 +1,5 @@
+'use strict';
+
 const { createCanvas, loadImage, Image } = require('canvas');
 const fs = require('fs');
 const sizeOf = require('image-size');
