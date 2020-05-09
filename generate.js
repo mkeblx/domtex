@@ -15,7 +15,7 @@ const argv = require('yargs')
   //.demandOption(['url'])
   .argv;
 
-var verbose = false;
+var verbose = true;
 var forceUpdate = false;
 
 (async () => {
@@ -86,7 +86,6 @@ var forceUpdate = false;
         width: width,
         height: height
       }
-      log(hashParams);
       let fileName = util.hash(hashParams)+'.png';
       let path = 'output/'+fileName;
       paths.push(path);
@@ -100,7 +99,6 @@ var forceUpdate = false;
     if (options.clip !== undefined) {
       hashParams.clip = clip;
     }
-    log(hashParams);
     let fileName = util.hash(hashParams)+'.png';
     let path = 'output/'+fileName;
     paths.push(path);
@@ -139,6 +137,7 @@ var forceUpdate = false;
 
   }
   if (filesFound === paths.length) {
+    log(hashParams);
     let resp = {
       url: url,
       textures: textures
@@ -160,7 +159,7 @@ var forceUpdate = false;
     deviceScaleFactor: scaleFactor
   });
 
-  await page.goto(url, { waitUntil: 'networkidle2' });
+  await page.goto(url, { waitUntil: 'networkidle2', timeout: 10000 });
 
   var attrs;
   var textures = {};
