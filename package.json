@@ -22,11 +22,11 @@
     "canvas": "^2.6.1",
     "express": "^4.17.1",
     "image-size": "^0.6.3",
-    "puppeteer": "^2.0.0",
+    "puppeteer": "^3.0.4",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
     "aframe": "^1.0.3",
-    "three": "^0.115.0"
+    "three": "^0.116.1"
   }
 }
