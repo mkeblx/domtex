@@ -142,8 +142,6 @@ h3 {
 <script>
 'use strict';
 
-var atlas = false;
-
 var loader = document.getElementById('loader');
 var textures = document.getElementById('textures');
 var atlasEl = document.getElementById('atlas');
@@ -166,17 +164,13 @@ function init() {
     var sel = document.getElementById('sel').value;
     var html = '';//document.getElementById('html').value;
 
-    if (atlasEl.checked) {
-      atlas = true;
-    } else {
-      atlas = false;
-    }
+    var atlas = atlasEl.checked;
 
-    generate(url, sel, html);
+    generate(url, sel, html, atlas);
   });
 }
 
-function generate(url, sel, html) {
+function generate(url, sel, html, atlas, force=true) {
   console.time('responseTime');
 
   console.log('Generate texture:');
@@ -192,13 +186,9 @@ function generate(url, sel, html) {
   if (sel !== '') {
     params['sel'] = sel;
   }
-  var forceUpdate = true;
-  if (forceUpdate) {
-    params['force'] = forceUpdate;
-  }
-  if (atlas) {
-    params['atlas'] = true;
-  }
+  params['force'] = force;
+  params['atlas'] = atlas;
+
   var reqURL = DOMTEX.generateRequestUrl(params);
 
   console.log(reqURL);
