@@ -73,7 +73,6 @@ server.on('request', (request, response) => {
 
     child.stdout.on('data', (data) => {
       data = `${data}`;
-      console.log(data);
       if (data.startsWith(':::')) {
         console.log('json generated');
 
