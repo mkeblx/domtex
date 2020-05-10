@@ -248,16 +248,27 @@ var forceUpdate = false;
       return attrs;
     }, selectors);
 
-    if (attrs === null) { // TODO: check if empty object not null
-      log('selector not found');
+    for (let x in attrs) {
+      if (attrs[x] === null) {
+        console.log(`selector '${x}' not found`);
+      }
+    }
+
+    const isEmpty = Object.values(attrs).every(x => (x === null));
+    if (isEmpty) {
+      log(attrs)
+      log('no selectors found');
     } else {
       log(Object.keys(attrs).length + ' selectors found');
       log(attrs);
     }
 
     for (const _sel in attrs) {
-      var texture = {};
       var _attrs = attrs[_sel];
+      if (_attrs === null) {
+        continue;
+      }
+      var texture = {};
       options.clip = _attrs;
       log(options);
 
@@ -306,7 +317,7 @@ var forceUpdate = false;
 
   await browser.close();
 })().catch(err => {
-  console.log('catch: ' + err);
+  console.log(err);
 });
 
 function resizeBuffer(buffer, width, height, scaleFactor) {
