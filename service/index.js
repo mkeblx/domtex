@@ -1,7 +1,7 @@
 const http = require('http');
 const _url = require('url');
 const querystring = require('querystring');
-const { execFile } = require('child_process');
+const { spawn, fork } = require('child_process');
 
 const util = require('./../util.js');
 
@@ -69,23 +69,38 @@ server.on('request', (request, response) => {
 
     console.log(args);
 
-    const child = execFile('node', args, (error, stdout, stderr) => {
-      console.log('callback');
-      if (error) {
-        throw error;
+    const child = spawn('node', args);
+
+    child.stdout.on('data', (data) => {
+      data = `${data}`;
+      console.log(data);
+      if (data.startsWith(':::')) {
+        console.log('json generated');
+
+        response.statusCode = 200;
+        response.setHeader('Content-Type', 'application/json');
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+
+        var respJson = data.slice(3);
+        response.write(respJson);
+
+        response.end();
+      } else {
+        console.log(data);
       }
-      console.log('generate.js output:');
-      console.log(stdout);
-
-      response.statusCode = 200;
-      response.setHeader('Content-Type', 'application/json');
-      response.setHeader('Access-Control-Allow-Origin', '*');
-      response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
-
-      var respJson = stdout;
-      response.write(respJson);
-
-      response.end();
+    });
+    child.stderr.on('data', (data) => {
+      console.log(`${data}`);
+    });
+    child.on('message', (data) => {
+      console.log(`${data}`);
+    });
+    child.on('close', (code, signal) => {
+      console.log('spawn closed');
+      if (code !== 0) {
+        console.log(`process exited with code ${code}`);
+      }
     });
   }
 
