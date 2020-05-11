@@ -61,8 +61,6 @@ var forceUpdate = false;
 
   if (argv.url) {
     url = argv.url;
-    if (!url.startsWith('http'))
-      url += 'http://';
   }
   log('url: ' + url);
 

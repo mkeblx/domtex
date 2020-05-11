@@ -40,12 +40,13 @@ var loading;
 var _tex;
 
 var reqURL;
-var site = 'http://localhost:8000/examples/template1.html';
+var site = 'examples/template1.html';
 var sels = ['[id]'];
 var atlas = true;
 var force = true;
+var url = window.location.protocol+'//'+window.location.host+'/'+site;
 var params = {
-  url: site,
+  url: url,
   sel: sels.join(','),
   atlas: atlas,
   force: force };
