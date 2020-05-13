@@ -141,7 +141,11 @@ var forceUpdate = false;
       textures: textures
     };
     log('Files found, exiting early');
-    log(':::'+JSON.stringify(resp), true);
+    if (process.send) {
+      process.send(resp);
+    } else {
+      log(JSON.stringify(resp), true);
+    }
     return;
   }
 
@@ -311,7 +315,11 @@ var forceUpdate = false;
     textures: textures,
     atlas: atlas
   };
-  log(':::'+JSON.stringify(resp), true);
+  if (process.send) {
+    process.send(resp);
+  } else {
+    log(JSON.stringify(resp), true);
+  }
 
   await browser.close();
 })().catch(err => {

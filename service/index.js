@@ -58,7 +58,7 @@ server.on('request', (request, response) => {
 
   function createResponse(json) {
 
-    var args = ['generate.js'];
+    var args = [];
     args.push('--url='+siteUrl);
     if (sel)
       args.push('--sel='+sel);
@@ -69,30 +69,27 @@ server.on('request', (request, response) => {
 
     console.log(args);
 
-    const child = spawn('node', args);
+    const child = fork('generate.js', args, {silent: true});
 
     child.stdout.on('data', (data) => {
       data = `${data}`;
-      if (data.startsWith(':::')) {
-        console.log('json generated');
-
-        response.statusCode = 200;
-        response.setHeader('Content-Type', 'application/json');
-        response.setHeader('Access-Control-Allow-Origin', '*');
-        response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
-
-        var respJson = data.slice(3);
-        response.write(respJson);
-
-        response.end();
-      } else {
-        console.log(data);
-      }
+      console.log(data);
     });
     child.stderr.on('data', (data) => {
       console.log(`${data}`);
     });
-    child.on('message', (data) => {
+    child.on('message', (json) => {
+      var data = JSON.stringify(json);
+
+      console.log('json generated');
+
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'application/json');
+      response.setHeader('Access-Control-Allow-Origin', '*');
+      response.setHeader('Access-Control-Allow-Methods', 'GET,POST');
+      response.write(data);
+      response.end();
+
       console.log(`${data}`);
     });
     child.on('close', (code, signal) => {
