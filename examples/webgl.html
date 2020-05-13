@@ -75,7 +75,7 @@ function init() {
     console.log(position);
   });
 
-  camera.position.z = 0.8;
+  camera.position.z = 0.5;
 
   window.addEventListener( 'resize', onWindowResize, false );
 
@@ -84,7 +84,9 @@ function init() {
   addLoadingIndicator();
 
   group = new THREE.Object3D();
-  group.position.y = 0.0;
+  let scale = 1/512;
+  group.scale.set(scale, scale, scale);
+  group.rotation.y = 0.4;
   scene.add(group);
 
   addElements();
@@ -121,7 +123,7 @@ async function addElements() {
     console.log(sel);
     console.log(texture);
 
-    var object = DOMTEX.createObject3D(sel, data);
+    var object = DOMTEX.createObject3D(sel, data, 1);
 
     object.position.y = y;
 
