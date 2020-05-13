@@ -14,6 +14,10 @@ DOMTEX.generateRequestUrl = function(params) {
 	var PORT = '8080';
 	var domain = 'http://localhost:'+PORT;
 
+  if (!params.url.startsWith('http')) {
+    params.url = window.location.protocol+'//'+window.location.host+'/'+params.url;
+  }
+
 	var reqURL = domain+'/generate?' + DOMTEX._serialize(params);
 	return reqURL;
 };
