@@ -129,14 +129,12 @@ if (window.THREE) {
     //geo.uvsNeedUpdate = true;
   };
 
-  DOMTEX.createObject3D = function(sel, data, s = 1/512) {
-    var doc = data.textures['document'];
-
+  DOMTEX.createObject3D = function(sel, data, scale = 1/512) {
     var tex = data.textures[sel];
     var aspect = tex.width / tex.height;
 
     var geometry = new THREE.PlaneGeometry(
-      tex.width * s, tex.height * s );
+      tex.width * scale, tex.height * scale );
 
     var texture = DOMTEX.createTexture(sel, data);
 

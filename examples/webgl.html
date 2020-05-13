@@ -75,7 +75,7 @@ function init() {
     console.log(position);
   });
 
-  camera.position.z = 1.0;
+  camera.position.z = 0.8;
 
   window.addEventListener( 'resize', onWindowResize, false );
 
@@ -117,31 +117,25 @@ async function addElements() {
     if (sel === 'document')
       continue;
 
+    var texture = data.textures[sel];
+    console.log(sel);
+    console.log(texture);
+
     var object = DOMTEX.createObject3D(sel, data);
 
     object.position.y = y;
-    object.position.z = 0.01 * i;
 
-    object.position.z = data.textures[sel].data.z;
-
-    console.log(y);
-    //y -= (tex.height * s);
+    object.position.z = texture.data.z;
 
 
     group.add( object );
-
-    i++;
   }
 
   addElementEvents();
 }
 
-// only handles ID as name
-// TODO: make recursive
 var $ = function(selector) {
-  //if (selector.charAt(0) === '#')
-    //selector = selector.slice(1);
-  return scene.children[0].getObjectByName(selector);
+  return scene.getObjectByName(selector);
 };
 
 function addElementEvents() {
