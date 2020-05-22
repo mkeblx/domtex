@@ -15,7 +15,9 @@ canvas { width: 100%; height: 100% }
 </head>
 <body>
   <div id="container"></div>
+
 <script src="js/three.js"></script>
+<script src="js/three/OrbitControls.js"></script>
 <script src="js/domtex.js"></script>
 <script>
 'use strict';
@@ -27,6 +29,8 @@ var camera;
 var renderer;
 
 var container;
+
+var controls;
 
 
 var raycaster = new THREE.Raycaster();
@@ -74,6 +78,8 @@ function init() {
   });
 
   camera.position.z = 0.5;
+
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
 
   window.addEventListener( 'resize', onWindowResize, false );
 
@@ -140,14 +146,18 @@ var $ = function(selector) {
 
 function addElementEvents() {
   $('#box1').addEventListener('click', function(ev){
-    alert('#box1 clicked');
+    toast('#box1 clicked');
   });
   $('#box2').addEventListener('click', function(ev){
-    alert('#box2 clicked');
+    toast('#box2 clicked');
   });
   $('#box3').addEventListener('click', function(ev){
-    alert('#box3 clicked');
+    toast('#box3 clicked');
   });
+}
+
+function toast(msg) {
+  console.log(msg);
 }
 
 function createElement() {
@@ -198,6 +208,8 @@ function animate(t) {
 
 var r = 0;
 function update(t, dt) {
+  controls.update();
+
   if (loading) {
     r += dt;
     loading.rotation.set( 0, 0, -r*4);
