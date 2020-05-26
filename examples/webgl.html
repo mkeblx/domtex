@@ -41,8 +41,6 @@ var group;
 
 var loading;
 
-var _tex;
-
 var url = 'examples/template1.html';
 var sels = ['[id]'];
 var atlas = true;
@@ -87,11 +85,18 @@ function init() {
 
   addLoadingIndicator();
 
+  var s = 512;
   group = new THREE.Object3D();
-  let scale = 1/512;
+  let scale = 1/s;
   group.scale.set(scale, scale, scale);
   group.rotation.y = 0.4;
   scene.add(group);
+
+  var obj = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5));
+  obj.position.set(0,0,s/4);
+  obj.scale.set(s,s,s);
+  var box = new THREE.BoxHelper(obj, 0xffff00);
+  group.add(box);
 
   addElements();
 
