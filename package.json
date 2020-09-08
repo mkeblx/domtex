@@ -22,7 +22,7 @@
     "canvas": "^2.6.1",
     "express": "^4.17.1",
     "image-size": "^0.6.3",
-    "puppeteer": "^3.0.4",
+    "puppeteer": "^5.2.1",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
