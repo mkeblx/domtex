@@ -27,6 +27,6 @@
   },
   "devDependencies": {
     "aframe": "^1.0.4",
-    "three": "^0.120.1"
+    "three": "^0.125.0"
   }
 }
