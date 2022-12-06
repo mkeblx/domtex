@@ -20,7 +20,7 @@
   "homepage": "https://github.com/mkeblx/domtex#readme",
   "dependencies": {
     "canvas": "^2.6.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "image-size": "^0.9.1",
     "puppeteer": "^5.2.1",
     "yargs": "^15.4.1"
